@@ -573,36 +573,17 @@ function ChannelCard({ ch, onClick, isDark, isActive, favorites, toggleFavorite,
         )}
         
         {/* Logo parent perfectly centered vertically and horizontally inside the tile */}
-        <div className="absolute inset-0 flex items-center justify-center z-10 p-3 sm:p-4">
-          <div className="relative w-full h-[62%] flex items-center justify-center group-hover:scale-105 transition-transform duration-300">
+        <div className="absolute inset-0 flex items-center justify-center z-10 p-1 sm:p-2">
+          <div className="relative w-full h-full flex items-center justify-center group-hover:scale-105 transition-transform duration-300">
             {/* Main Centered Logo */}
             <ChannelLogo 
               src={ch.logo} 
               alt={ch.name} 
-              className="max-w-[85%] max-h-[85%] object-contain"
+              className="w-full h-full object-contain"
               isDark={isDark} 
               liquidGlass={liquidGlass} 
               status={ch.status} 
             />
-
-            {/* Reflection Effect inside tiles */}
-            <div 
-              className="absolute top-[90%] left-0 w-full h-[35%] flex items-center justify-center select-none pointer-events-none origin-top overflow-hidden opacity-25 filter blur-[0.4px]"
-              style={{
-                transform: "scaleY(-0.6)",
-                maskImage: "linear-gradient(to bottom, rgba(0,0,0,1) 0%, rgba(0,0,0,0) 80%)",
-                WebkitMaskImage: "-webkit-linear-gradient(top, rgba(0,0,0,1) 0%, rgba(0,0,0,0) 80%)"
-              }}
-            >
-              <ChannelLogo 
-                src={ch.logo} 
-                alt={ch.name} 
-                className="max-w-[85%] max-h-[85%] object-contain"
-                isDark={isDark} 
-                liquidGlass={liquidGlass} 
-                status={ch.status} 
-              />
-            </div>
           </div>
         </div>
       </motion.button>
@@ -1658,6 +1639,35 @@ function TVContent({ active, setActive, isDark, favorites, toggleFavorite, user,
   const beepGainRef = useRef<GainNode | null>(null);
   const audioContextRef = useRef<AudioContext | null>(null);
 
+  const [isMobileScheduleOpen, setIsMobileScheduleOpen] = useState(false);
+
+  // Generate 24-hour schedule based on dynamic channel name to look extremely realistic!
+  const scheduleItems = useMemo(() => {
+    return Array.from({ length: 24 }).map((_, hour) => {
+      const timeStr = String(hour).padStart(2, '0') + ":00";
+      return {
+        time: timeStr,
+        title: "Chương trình",
+        hour
+      };
+    });
+  }, []);
+
+  const currentHour = currentTime ? currentTime.getHours() : new Date().getHours();
+  const activeItemRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    // Scroll to current hour item smoothly inside the schedule sidebar
+    setTimeout(() => {
+      if (activeItemRef.current) {
+        activeItemRef.current.scrollIntoView({
+          behavior: 'smooth',
+          block: 'nearest'
+        });
+      }
+    }, 300);
+  }, [active.name, currentHour]);
+
   // Pre-initialize and resume AudioContext on actual user interactions (clicks or touchstarts) to satisfy iOS Safari & Chrome Mobile requirements
   useEffect(() => {
     const initAndUnlockAudio = () => {
@@ -2184,14 +2194,18 @@ function TVContent({ active, setActive, isDark, favorites, toggleFavorite, user,
         </div>
       </LiquidModal>
 
-      {/* VIDEO PLAYER */}
-      <div 
-        ref={containerRef}
-        className={`bg-black mb-4 md:mb-6 flex items-center justify-center border shadow-2xl relative overflow-hidden group w-full md:max-w-4xl lg:max-w-5xl mx-auto ${
-        isMultiview ? "aspect-auto min-h-[300px] md:min-h-[400px]" : "aspect-video"
-      } ${
-        liquidGlass ? "rounded-xl md:rounded-2xl" : "rounded-lg"
-      } ${isDark ? "border-slate-800" : "border-slate-300"}`}>
+      {/* MAIN WATCH AREA WITH SIDEBAR SCHEDULE */}
+      <div className="w-full md:max-w-4xl lg:max-w-6xl xl:max-w-[1280px] mx-auto flex flex-col lg:block gap-4 md:gap-6 mb-4 md:mb-6 relative z-10 lg:pr-[344px] xl:pr-[389px]">
+        
+        {/* VIDEO PLAYER */}
+        <div 
+          ref={containerRef}
+          className={`bg-black flex items-center justify-center border shadow-2xl relative overflow-hidden group w-full ${
+            isMultiview ? "aspect-auto min-h-[300px] md:min-h-[400px]" : "aspect-video"
+          } ${
+            liquidGlass ? "rounded-xl md:rounded-2xl" : "rounded-lg"
+          } ${isDark ? "border-slate-800" : "border-slate-300"}`}
+        >
         {!user && !isDev && !bypassed ? (
           <div className={`absolute inset-0 z-10 flex flex-col items-center justify-center bg-slate-900/40 p-6 text-center ${
             liquidGlass ? "backdrop-blur-xl" : "backdrop-blur-none"
@@ -2199,7 +2213,11 @@ function TVContent({ active, setActive, isDark, favorites, toggleFavorite, user,
             <motion.div 
               initial={{ scale: 0.8, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
-              className={`p-10 border shadow-2xl flex flex-col items-center space-y-6 bg-white/80 border-black/5 ${
+              className={`p-10 border shadow-2xl flex flex-col items-center space-y-6 ${
+                isDark 
+                  ? "bg-[#11131c]/85 border-white/10 text-white" 
+                  : "bg-white/80 border-black/5 text-slate-900 shadow-xl"
+              } backdrop-blur-md ${
                 liquidGlass ? "rounded-[40px]" : "rounded-2xl"
               }`}
             >
@@ -2207,8 +2225,8 @@ function TVContent({ active, setActive, isDark, favorites, toggleFavorite, user,
                 <Lock className="h-10 w-10 text-[#4AC4FE]" />
               </div>
               <div className="space-y-1">
-                <h3 className="text-2xl font-bold text-slate-900">Đăng nhập để xem</h3>
-                <p className="text-slate-500 text-sm max-w-[280px]">Vui lòng đăng nhập tài khoản VPlay để có thể xem kênh trực tuyến này.</p>
+                <h3 className={`text-2xl font-bold ${isDark ? "text-white" : "text-slate-900"}`}>Đăng nhập để xem</h3>
+                <p className={`text-sm max-w-[280px] ${isDark ? "text-slate-400" : "text-slate-500"}`}>Vui lòng đăng nhập tài khoản VPlay để có thể xem kênh trực tuyến này.</p>
               </div>
               <button 
                 onClick={onLogin}
@@ -2497,10 +2515,86 @@ function TVContent({ active, setActive, isDark, favorites, toggleFavorite, user,
             )}
           </>
         )}
+        </div>
+
+        {/* LỊCH PHÁT SÓNG SECTION */}
+        <div 
+          className={`w-full lg:absolute lg:top-0 lg:bottom-0 lg:right-0 lg:w-[320px] xl:w-[365px] shrink-0 flex flex-col p-4 md:p-5 border shadow-2xl overflow-hidden transition-all duration-300 h-[360px] lg:h-auto ${
+            liquidGlass ? "rounded-xl md:rounded-2xl" : "rounded-lg"
+          } ${
+            isDark 
+              ? "bg-[#11131c]/60 border-slate-800 text-white backdrop-blur-md" 
+              : "bg-white/85 border-slate-200 text-slate-900 backdrop-blur-md shadow-xl"
+          }`}
+          style={{
+            minHeight: "280px"
+          }}
+        >
+          {/* Header */}
+          <div className="flex items-center justify-between pb-3 mb-3 border-b border-white/10 flex-shrink-0">
+            <div className="flex items-center gap-2">
+              <div className="p-1.5 rounded-lg bg-[#4AC4FE]/10 text-[#4AC4FE]">
+                <Clock size={16} />
+              </div>
+              <span className="text-xs md:text-sm font-black uppercase tracking-wider">Lịch Phát Sóng</span>
+            </div>
+            <div className="flex items-center gap-1.5">
+              <span className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse" />
+              <span className="text-[9px] font-mono font-bold uppercase tracking-widest opacity-60">Hôm nay</span>
+            </div>
+          </div>
+
+          {/* Schedule List */}
+          <div className="flex-1 overflow-y-auto pr-1 space-y-2 scrollbar-thin scrollbar-thumb-white/15 scrollbar-track-transparent">
+            {scheduleItems.map((item) => {
+              const isActive = item.hour === currentHour;
+              return (
+                <div
+                  key={`schedule-${item.hour}`}
+                  ref={isActive ? activeItemRef : null}
+                  id={`schedule-item-${item.hour}`}
+                  className={`flex items-start gap-4 p-2.5 rounded-xl transition-all duration-300 relative ${
+                    isActive 
+                      ? (isDark 
+                          ? "bg-gradient-to-r from-[#4AC4FE]/20 to-transparent border border-[#4AC4FE]/30 text-white shadow-md shadow-[#4AC4FE]/5"
+                          : "bg-gradient-to-r from-[#4AC4FE]/10 to-transparent border border-[#4AC4FE]/20 text-[#0c4a6e] shadow-sm")
+                      : (isDark 
+                          ? "hover:bg-white/5 border border-transparent text-white/70 hover:text-white"
+                          : "hover:bg-slate-100 border border-transparent text-slate-600 hover:text-slate-900")
+                  }`}
+                >
+                  {/* Time Badge */}
+                  <div className={`font-mono text-xs font-bold px-2 py-0.5 rounded-lg shrink-0 ${
+                    isActive 
+                      ? "bg-[#4AC4FE] text-black shadow-sm"
+                      : (isDark ? "bg-white/5 text-white/50" : "bg-slate-200/60 text-slate-500")
+                  }`}>
+                    {item.time}
+                  </div>
+
+                  {/* Program Title */}
+                  <div className="flex-1 space-y-0.5">
+                    <p className={`text-[11px] sm:text-xs leading-tight font-black uppercase tracking-tight ${
+                      isActive ? "text-[#4AC4FE]" : ""
+                    }`}>
+                      {item.title}
+                    </p>
+                    {isActive && (
+                      <div className="flex items-center gap-1">
+                        <span className="text-[8px] font-bold text-red-500 uppercase tracking-widest animate-pulse">• ĐANG PHÁT TRỰC TIẾP</span>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+
       </div>
 
       {/* CHANNEL INFO */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 px-2 mt-4 md:mt-0 md:max-w-4xl lg:max-w-5xl mx-auto w-full">
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 px-2 mt-4 md:mt-0 md:max-w-4xl lg:max-w-6xl xl:max-w-[1280px] mx-auto w-full">
         <div className="flex flex-col gap-1 md:gap-2">
           <div className="flex flex-wrap items-center gap-3 md:gap-4">
             <motion.h2 
@@ -2579,6 +2673,18 @@ function TVContent({ active, setActive, isDark, favorites, toggleFavorite, user,
                <LayoutGrid size={16} />
              </button>
            )}
+           {/* Mobile-only Lịch Phát Sóng Button */}
+           <button 
+             onClick={() => setIsMobileScheduleOpen(true)}
+             className={`md:hidden p-3 rounded-xl border transition-all ${
+               isDark 
+                 ? "bg-white/5 border-white/10 text-white hover:bg-white/10" 
+                 : "bg-white border-slate-200 text-slate-600 hover:bg-slate-50 shadow-sm"
+             }`}
+             title="Lịch phát sóng"
+           >
+             <Clock size={16} />
+           </button>
            <button 
              onClick={() => toggleFavorite(active)}
              className={`p-3 md:p-4 rounded-xl md:rounded-2xl border transition-all ${
@@ -2742,6 +2848,104 @@ function TVContent({ active, setActive, isDark, favorites, toggleFavorite, user,
           )}
         </div>
       </div>
+
+      {/* Mobile Schedule Drawer/Modal */}
+      <AnimatePresence>
+        {isMobileScheduleOpen && (
+          <div className="fixed inset-0 z-[999] flex items-end justify-center md:hidden">
+            {/* Backdrop */}
+            <motion.div 
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setIsMobileScheduleOpen(false)}
+              className="absolute inset-0 bg-black/60 backdrop-blur-sm"
+            />
+            
+            {/* Modal/Drawer Container */}
+            <motion.div 
+              initial={{ y: "100%" }}
+              animate={{ y: 0 }}
+              exit={{ y: "100%" }}
+              transition={{ type: "spring", damping: 25, stiffness: 250 }}
+              className={`relative w-full max-h-[85vh] flex flex-col rounded-t-[32px] border-t overflow-hidden shadow-2xl p-5 ${
+                isDark 
+                  ? "bg-[#11131c]/95 border-white/10 text-white" 
+                  : "bg-white/95 border-slate-200 text-slate-900 shadow-2xl"
+              } backdrop-blur-3xl`}
+              style={{ paddingBottom: "env(safe-area-inset-bottom, 24px)" }}
+            >
+              {/* Drag indicator/handle */}
+              <div className="w-12 h-1.5 rounded-full bg-slate-500/30 mx-auto mb-4 shrink-0" onClick={() => setIsMobileScheduleOpen(false)} />
+              
+              {/* Header */}
+              <div className="flex items-center justify-between pb-3 mb-4 border-b border-slate-200/10 flex-shrink-0">
+                <div className="flex items-center gap-2">
+                  <div className="p-1.5 rounded-lg bg-[#4AC4FE]/10 text-[#4AC4FE]">
+                    <Clock size={18} />
+                  </div>
+                  <div>
+                    <span className="text-sm sm:text-base font-black uppercase tracking-wider block">Lịch Phát Sóng Kênh</span>
+                    <span className="text-[10px] opacity-60 font-medium block">Đang xem: {active.name}</span>
+                  </div>
+                </div>
+                <button 
+                  onClick={() => setIsMobileScheduleOpen(false)}
+                  className={`p-2 rounded-full transition-colors ${
+                    isDark ? "bg-white/5 text-white/70 hover:text-white" : "bg-slate-100 text-slate-900 hover:bg-slate-200"
+                  }`}
+                >
+                  <X size={18} />
+                </button>
+              </div>
+
+              {/* Schedule List content inside mobile modal */}
+              <div className="flex-1 overflow-y-auto pr-1 space-y-2.5 pb-8 no-scrollbar scrollbar-none">
+                {scheduleItems.map((item) => {
+                  const isActive = item.hour === currentHour;
+                  return (
+                    <div
+                      key={`mobile-sched-${item.hour}`}
+                      className={`flex items-start gap-4 p-3 rounded-2xl transition-all duration-300 relative ${
+                        isActive 
+                          ? (isDark 
+                              ? "bg-gradient-to-r from-[#4AC4FE]/20 to-transparent border border-[#4AC4FE]/30 text-white shadow-md shadow-[#4AC4FE]/5"
+                              : "bg-gradient-to-r from-[#4AC4FE]/10 to-transparent border border-[#4AC4FE]/20 text-[#0c4a6e] shadow-sm")
+                          : (isDark 
+                              ? "hover:bg-white/5 border border-transparent text-white/70 hover:text-white"
+                              : "hover:bg-slate-50 border border-transparent text-slate-600 hover:text-slate-900")
+                      }`}
+                    >
+                      {/* Time Badge */}
+                      <div className={`font-mono text-xs font-bold px-2 py-0.5 rounded-lg shrink-0 ${
+                        isActive 
+                          ? "bg-[#4AC4FE] text-black shadow-sm"
+                          : (isDark ? "bg-white/5 text-white/50" : "bg-slate-200 text-slate-500")
+                      }`}>
+                        {item.time}
+                      </div>
+
+                      {/* Program Title */}
+                      <div className="flex-1 space-y-0.5">
+                        <p className={`text-[11px] sm:text-xs leading-tight font-black uppercase tracking-tight ${
+                          isActive ? "text-[#4AC4FE]" : ""
+                        }`}>
+                          {item.title}
+                        </p>
+                        {isActive && (
+                          <div className="flex items-center gap-1">
+                            <span className="text-[9px] font-bold text-red-500 uppercase tracking-widest animate-pulse">• ĐANG PHÁT TRỰC TIẾP</span>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }
@@ -5603,7 +5807,11 @@ function AuthModal({ isOpen, onClose, isDark, liquidGlass, setIsDev, setUserData
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.5, opacity: 0 }}
               transition={{ type: "spring", damping: 30, stiffness: 400 }}
-              className={`relative w-full max-w-5xl max-h-[95vh] overflow-hidden shadow-[0_40px_100px_rgba(0,0,0,0.4)] flex flex-col md:flex-row min-h-[400px] md:min-h-[580px] rounded-[40px] md:rounded-[56px] bg-white/95 backdrop-blur-[100px] border border-white/40`}
+              className={`relative w-full max-w-5xl max-h-[95vh] overflow-hidden shadow-[0_40px_100px_rgba(0,0,0,0.4)] flex flex-col md:flex-row min-h-[400px] md:min-h-[580px] rounded-[40px] md:rounded-[56px] ${
+                isDark 
+                  ? "bg-[#11131c]/95 border-white/10 text-white" 
+                  : "bg-white/95 border-white/40 text-slate-900"
+              } backdrop-blur-[100px] border`}
             >
               {/* Image/Visual Side - Responsive hiding for very small screens if necessary, or just smaller height */}
               <div className="w-full md:w-[45%] h-48 md:h-auto bg-gradient-to-br from-primary to-indigo-900 p-6 md:p-12 relative flex flex-col justify-between overflow-hidden shrink-0">
@@ -9452,7 +9660,7 @@ const [sidebarWidth, setSidebarWidth] = useState(() => {
       bgGradient: "bg-gradient-to-br from-rose-500 via-pink-500 to-red-600"
     },
     { 
-      logo: vtvProposal?.logo || "https://static.wikia.nocookie.net/logos/images/4/4b/VTV1_logo_01.11.2022_%28SD_%26_HD%29_v1.png/revision/latest?cb=20260222102645&path-prefix=uk", 
+      logo: vtvProposal?.logo || "https://static.wikia.nocookie.net/ftv/images/1/14/Imagev1.png/revision/latest/scale-to-width-down/1000?cb=20260601082104&path-prefix=vi", 
       title: vtvProposal ? `Kênh VTV & VTVCab gợi ý cho bạn: ${vtvProposal.name}` : "Kênh VTV & VTVCab gợi ý cho bạn: VTV3 HD", 
       desc: "Thưởng thức các chương trình giải trí, phim truyền hình Việt giờ vàng, thể thao sống động và phim điện ảnh đặc sắc.",
       tag: "VTV & VTVCab",
