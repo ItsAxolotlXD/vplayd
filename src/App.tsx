@@ -570,7 +570,7 @@ function ChannelCard({ ch, onClick, isDark, isActive, favorites, toggleFavorite,
         )}
         
         {/* Logo parent perfectly centered vertically and horizontally inside the tile */}
-        <div className="absolute inset-0 flex items-center justify-center z-10 p-[5px] sm:p-[8px]">
+        <div className={`absolute inset-0 flex items-center justify-center z-10 ${ch.category === "VTVcab" ? "p-[7px] sm:p-[10px]" : "p-[5px] sm:p-[8px]"}`}>
           <div className="relative w-full h-full flex items-center justify-center group-hover:scale-105 transition-transform duration-300">
             {/* Main Centered Logo */}
             <ChannelLogo 
