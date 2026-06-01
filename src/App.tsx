@@ -462,14 +462,11 @@ function ChannelLogo({ src, alt, className, isDark, liquidGlass, status }: { src
   let finalSrc = src;
   if (alt === "Vietnam Today") {
     finalSrc = !isDark 
-      ? "https://static.wikia.nocookie.net/logos/images/0/0d/Vietnam_Today_black%2C_vertical%2C_gradient.png/revision/latest/scale-to-width-down/1000?cb=20260527071119&path-prefix=uk"
-      : "https://img.vtvprime.vn/poWO4cMIOvlO4LFEoljeRHTNK-92PkmcxEiRMCjB4pM/rs:fit:836:468/czM6Ly9wcmQtc24taW1hZ2VzL2NoYW5uZWwvMTE5YTVjNDYtMTZiMC00ZTUwLTlkNjItZmM1ZTJjZjQ3OTU4LnBuZw==.png";
+      ? "https://static.wikia.nocookie.net/ftv/images/e/ef/Vtd2.png/revision/latest/scale-to-width-down/1000?cb=20260601094937&path-prefix=vi"
+      : "https://static.wikia.nocookie.net/ftv/images/7/7f/Vtd.png/revision/latest/scale-to-width-down/1000?cb=20260601094859&path-prefix=vi";
   }
 
-  let scaleClass = "scale-[1.1]";
-  if (alt.includes("VTV6") || alt.includes("VTV7")) {
-    scaleClass = "scale-[1.25]";
-  }
+  const scaleClass = "scale-[1.1]";
 
   const isVTV5_TN = alt === "VTV5 Tây Nguyên";
   const isVTV5_TNB = alt === "VTV5 Tây Nam Bộ";
@@ -573,7 +570,7 @@ function ChannelCard({ ch, onClick, isDark, isActive, favorites, toggleFavorite,
         )}
         
         {/* Logo parent perfectly centered vertically and horizontally inside the tile */}
-        <div className="absolute inset-0 flex items-center justify-center z-10 p-1 sm:p-2">
+        <div className="absolute inset-0 flex items-center justify-center z-10 p-[5px] sm:p-[8px]">
           <div className="relative w-full h-full flex items-center justify-center group-hover:scale-105 transition-transform duration-300">
             {/* Main Centered Logo */}
             <ChannelLogo 
