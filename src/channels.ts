@@ -23,10 +23,6 @@ export const channels: Channel[] = [
   { category: "VTV", name: "VTV9", logo: "https://static.wikia.nocookie.net/ftv/images/8/8c/Imagei9.png/revision/latest/scale-to-width-down/1000?cb=20260601094610&path-prefix=vi", stream: "https://live.fptplay53.net/fnxhd1/vtv9hd_vhls.smil/chunklist.m3u8" },
   { category: "VTV", name: "VTV10", logo: "https://static.wikia.nocookie.net/ftv/images/a/a0/I10.png/revision/latest/scale-to-width-down/1000?cb=20260601094723&path-prefix=vi", stream: "https://live.fptplay53.net/fnxch2/vtvcantho_abr.smil/chunklist_b4200000.m3u8" },
   { category: "VTV", name: "Vietnam Today", logo: "https://static.wikia.nocookie.net/ftv/images/7/7f/Vtd.png/revision/latest/scale-to-width-down/1000?cb=20260601094859&path-prefix=vi", stream: "https://live.fptplay53.net/fnxhd1/vntoday_vhls.smil/chunklist_b5000000.m3u8" },
-  { category: "K+", name: "K+ SPORT 1", logo: "https://img.vtvprime.vn/T8J7b_G8h1L6R-P_-m9_6_P6P-g/rs:fit:836:468/czM6Ly9wcmQtc24taW1hZ2VzL2NoYW5uZWwvazFzcG9ydDEucG5n", stream: "https://freem3u.xyz/api/live/play.m3u8?vid=195" },
-  { category: "K+", name: "K+ SPORT 2", logo: "https://img.vtvprime.vn/T8J7b_G8h1L6R-P_-m9_6_P6P-g/rs:fit:836:468/czM6Ly9wcmQtc24taW1hZ2VzL2NoYW5uZWwvazFzcG9ydDIucG5n", stream: "https://freem3u.xyz/api/live/play.m3u8?vid=196" },
-  { category: "VTC", name: "VTC1", logo: "https://static.wikia.nocookie.net/logos/images/0/07/VTC1_logo_2017.png", stream: "https://live.fptplay53.net/fnxch2/vtc1hd_abr.smil/chunklist.m3u8" },
-  { category: "VTC", name: "VTC3", logo: "https://static.wikia.nocookie.net/logos/images/5/52/VTC3_logo_2017.png", stream: "https://live.fptplay53.net/fnxch2/vtc3hd_abr.smil/chunklist.m3u8" },
 
   // HTV
   { category: "HTV", name: "HTV1", logo: "https://static.wikia.nocookie.net/ftv/images/0/04/HTV1.png/revision/latest/scale-to-width-down/1000?cb=20260601104705&path-prefix=vi", stream: "https://live.fptplay53.net/epzhd1/htv1_hls.smil/chunklist.m3u8" },
@@ -75,7 +71,7 @@ export const channels: Channel[] = [
   { category: "Địa phương", name: "Điện Biên (ĐTV)", logo: "https://static.wikia.nocookie.net/ftv/images/9/91/D4.png/revision/latest/scale-to-width-down/1000?cb=20260601122957&path-prefix=vi", stream: "https://truyenhinh.vnptvas.vn/live.m3u8?c=vstv362&q=high&pkg=pkg11.hni" },
   { category: "Địa phương", name: "ĐNNRTV1", logo: "https://static.wikia.nocookie.net/ftv/images/a/ae/D51.png/revision/latest/scale-to-width-down/1000?cb=20260601123058&path-prefix=vi", stream: "https://freem3u.xyz/api/live/play.m3u8?vid=49" },
   { category: "Địa phương", name: "ĐNNRTV2", logo: "https://static.wikia.nocookie.net/ftv/images/8/85/D62.png/revision/latest/scale-to-width-down/1000?cb=20260601123136&path-prefix=vi", stream: "https://freem3u.xyz/api/live/play.m3u8?vid=80" },
-  { category: "Địa phương", name: "Đồng Nai (ĐNNRTV3)", logo: "LOGO THÊM VÀO SAU", stream: "https://1.org.vn/dnrtv3", qualityBadge: "720p", qualityColor: "orange" },
+  { category: "Địa phương", name: "Đồng Nai (ĐNNRTV3)", logo: "LOGO THÊM VÀO SAU", stream: "https://1.org.vn/dnrtv3", qualityBadge: "720p", qualityColor: "bg-orange-500" },
   { category: "Địa phương", name: "Đồng Tháp 1 (THĐT1)", logo: "https://static.wikia.nocookie.net/ftv/images/4/44/D8.png/revision/latest/scale-to-width-down/1000?cb=20260601123433&path-prefix=vi", stream: "https://live.fptplay53.net/epzsd1/dongthap_hls.smil/chunklist.m3u8" },
   { category: "Địa phương", name: "Đồng Tháp 2 (Miền Tây - THĐT2)", logo: "https://static.wikia.nocookie.net/ftv/images/1/14/D9.png/revision/latest/scale-to-width-down/1000?cb=20260601123603&path-prefix=vi", stream: "https://618b88f69e53b.streamlock.net/THDT2/thdttv2/playlist.m3u8" },
   { category: "Địa phương", name: "Gia Lai (GTV)", logo: "https://static.wikia.nocookie.net/ftv/images/d/db/Gtvc.png/revision/latest/scale-to-width-down/1000?cb=20260601123951&path-prefix=vi", stream: "https://live.fptplay53.net/epzsd1/gialai01_hls.smil/chunklist_b1800000.m3u8" },
@@ -116,10 +112,4 @@ export const channels: Channel[] = [
   { category: "Thiết yếu", name: "Truyền hình Công an Nhân dân (ANTV)", logo: "https://img-zlr1.tv360.vn/image1/2020_09_23/1600822516608/b33963dc0df8_640_360.png", stream: "https://live.fptplay53.net/fnxhd2/anninhtv_vhls.smil/chunklist.m3u8" },
   { category: "Thiết yếu", name: "Truyền hình Quốc phòng Việt Nam (QPVN)", logo: "https://static.wikia.nocookie.net/logos/images/5/5d/QPVN.png/revision/latest/scale-to-width-down/1000?cb=20220827083916&path-prefix=vi", stream: "https://live.fptplay53.net/fnxhd2/quocphongvnhd_vhls.smil/chunklist.m3u8" },
 
-  // Phát thanh
-  { category: "Phát thanh", name: "VOV1", logo: "https://static.wikia.nocookie.net/logos/images/0/0d/VOV1_logo_2017.png/revision/latest?cb=20220311024316&path-prefix=vi", stream: "https://vov.vn/live/vov1.m3u8" },
-  { category: "Phát thanh", name: "VOV2", logo: "https://static.wikia.nocookie.net/logos/images/a/a4/VOV2_logo_2017.png/revision/latest?cb=20220311024317&path-prefix=vi", stream: "https://vov.vn/live/vov2.m3u8" },
-  { category: "Phát thanh", name: "VOV3", logo: "https://static.wikia.nocookie.net/logos/images/a/a2/VOV3_logo_2017.png/revision/latest?cb=20220311024318&path-prefix=vi", stream: "https://vov.vn/live/vov3.m3u8" },
-  { category: "Phát thanh", name: "VOV Giao thông Hà Nội", logo: "https://static.wikia.nocookie.net/logos/images/5/5e/VOV_Giao_th%C3%B4ng_logo_2017.png/revision/latest?cb=20220311024323&path-prefix=vi", stream: "https://vov.vn/live/vovgt-hn.m3u8" },
-  { category: "Phát thanh", name: "VOV Giao thông TP.HCM", logo: "https://static.wikia.nocookie.net/logos/images/5/5e/VOV_Giao_th%C3%B4ng_logo_2017.png/revision/latest?cb=20220311024323&path-prefix=vi", stream: "https://vov.vn/live/vovgt-hcm.m3u8" },
 ];

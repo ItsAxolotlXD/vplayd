@@ -349,8 +349,8 @@ const SplashScreen = ({
           <div className="flex flex-col items-center gap-6 text-center">
             <div className="flex flex-col items-center gap-3">
               <LoadingSpinner isDark={true} className="w-12 h-12 text-[#4AC4FE] opacity-90" />
-              <span className="text-white/80 text-sm font-semibold tracking-wide mt-2 select-none animate-pulse">
-                {getGreeting()}
+              <span className="text-white/80 text-sm font-semibold tracking-wide mt-2 select-none flex items-center justify-center gap-1.5 animate-pulse">
+                Sản phẩm của <span className="bg-clip-text text-transparent bg-gradient-to-r from-yellow-400 to-amber-500 font-extrabold">VNRT</span>
               </span>
             </div>
           </div>
@@ -546,12 +546,12 @@ function ChannelCard({ ch, onClick, isDark, isActive, favorites, toggleFavorite,
   return (
     <div className={`relative group ${className || ""}`}>
       {/* Background glow when active or hover */}
-      <div className={`absolute -inset-1 rounded-2xl blur-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-0 ${isActive ? "bg-[#4AC4FE]/10 opacity-100" : isDark ? "bg-white/2" : "bg-slate-500/5"}`} />
+      <div className={`absolute -inset-1 rounded-2xl blur-lg opacity-0 group-hover:opacity-100 transition-none z-0 ${isActive ? "bg-[#4AC4FE]/10 opacity-100" : isDark ? "bg-white/2" : "bg-slate-500/5"}`} />
       
       <motion.button
         whileTap={{ scale: 0.98 }}
         onClick={onClick}
-        className={`w-full ${isLiveTab ? "aspect-[1.5/1]" : "aspect-square"} p-2.5 xs:p-3 sm:p-5 flex items-center justify-center relative overflow-hidden transition-all duration-300 z-10 rounded-2xl border-[3px] hover:border-white hover:z-20 ${
+        className={`w-full ${isLiveTab ? "aspect-[1.5/1]" : "aspect-square"} p-2.5 xs:p-3 sm:p-5 flex items-center justify-center relative overflow-hidden transition-none z-10 rounded-2xl border-[3px] hover:border-white hover:z-20 ${
           isActive
             ? isDark
               ? "bg-[#252529] border-[#4AC4FE] shadow-lg shadow-[#4AC4FE]/25"
@@ -586,7 +586,7 @@ function ChannelCard({ ch, onClick, isDark, isActive, favorites, toggleFavorite,
         
         {/* Logo parent perfectly centered vertically and horizontally inside the tile */}
         <div className={`absolute inset-0 flex items-center justify-center z-10 ${ch.category === "VTVcab" ? "p-[14px] sm:p-[18px]" : "p-[5px] sm:p-[8px]"}`}>
-          <div className="relative w-full h-full flex items-center justify-center transition-transform duration-300">
+          <div className="relative w-full h-full flex items-center justify-center transition-none">
             {/* Main Centered Logo */}
             <ChannelLogo 
               src={ch.logo} 
@@ -602,7 +602,7 @@ function ChannelCard({ ch, onClick, isDark, isActive, favorites, toggleFavorite,
       
       <button 
         onClick={(e) => { e.stopPropagation(); toggleFavorite(ch); }}
-        className={`absolute top-1.5 right-1.5 xs:top-2.5 xs:right-2.5 p-1 xs:p-1.5 rounded-full backdrop-blur-md opacity-80 sm:opacity-0 group-hover:opacity-100 transition-all hover:scale-110 z-20 ${
+        className={`absolute top-1.5 right-1.5 xs:top-2.5 xs:right-2.5 p-1 xs:p-1.5 rounded-full backdrop-blur-md opacity-80 sm:opacity-0 group-hover:opacity-100 transition-none hover:scale-110 z-20 ${
           favorites.includes(ch.name) 
             ? "text-white bg-[#4AC4FE] border border-[#4AC4FE] shadow-sm shadow-[#4AC4FE]/20" 
             : isDark 
@@ -617,15 +617,11 @@ function ChannelCard({ ch, onClick, isDark, isActive, favorites, toggleFavorite,
 }
 
 
-const AnimatedTimeBox = ({ value, label, isDark }: { value: number, label: string, isDark: boolean }) => {
+const AnimatedTimeBox = ({ value, label, isDark, textClassName }: { value: number, label: string, isDark: boolean, textClassName?: string }) => {
   const formattedValue = String(value).padStart(2, '0');
   return (
-    <div className="flex flex-col items-center select-none">
-      <div className={`relative w-11 h-11 md:w-14 md:h-14 rounded-2xl flex items-center justify-center overflow-hidden font-mono text-base md:text-lg font-black ${
-        isDark 
-          ? "bg-white/5 border border-white/10 shadow-[inner_y_1px_4px_rgba(255,255,255,0.05)] text-white" 
-          : "bg-slate-100 border border-slate-200/85 shadow-inner text-slate-800"
-      }`}>
+    <div className="flex flex-col items-center select-none px-1">
+      <div className="relative w-12 h-10 md:w-16 md:h-14 flex items-center justify-center overflow-hidden font-mono text-2xl md:text-3xl font-black">
         <AnimatePresence mode="popLayout">
           <motion.span
             key={formattedValue}
@@ -633,13 +629,13 @@ const AnimatedTimeBox = ({ value, label, isDark }: { value: number, label: strin
             animate={{ y: 0, opacity: 1 }}
             exit={{ y: -22, opacity: 0 }}
             transition={{ type: "spring", stiffness: 350, damping: 24 }}
-            className="absolute flex items-center justify-center w-full h-full text-rose-500 font-extrabold"
+            className={`absolute flex items-center justify-center w-full h-full font-extrabold ${textClassName || "text-white"}`}
           >
             {formattedValue}
           </motion.span>
         </AnimatePresence>
       </div>
-      <span className={`text-[10px] uppercase font-bold mt-1.5 ${isDark ? "text-slate-500" : "text-slate-400"}`}>{label}</span>
+      <span className={`text-[10px] uppercase font-bold mt-1.5 ${isDark ? "text-slate-400" : "text-slate-500"}`}>{label}</span>
     </div>
   );
 };
@@ -1055,7 +1051,7 @@ function HomeContent({
             <span className="text-xl font-bold -mt-5 opacity-40 select-none">:</span>
             <AnimatedTimeBox value={timeLeft.minutes} label="Phút" isDark={isDark} />
             <span className="text-xl font-bold -mt-5 opacity-40 select-none">:</span>
-            <AnimatedTimeBox value={timeLeft.seconds} label="Giây" isDark={isDark} />
+            <AnimatedTimeBox value={timeLeft.seconds} label="Giây" isDark={isDark} textClassName="text-red-500" />
           </div>
 
           <motion.button
@@ -1129,8 +1125,12 @@ function HomeContent({
                 style={{ gap: `${itemConfig.gap}px` }}
               >
                 {randomChannels.map((ch, idx) => (
-                  <div 
+                  <motion.div 
                     key={`home-random-${ch.name}-${idx}`} 
+                    initial={{ opacity: 0, x: 50 }}
+                    whileInView={{ opacity: 1, x: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ type: "spring", stiffness: 100, damping: 15, delay: idx * 0.05 }}
                     style={{ width: `${itemConfig.width}px` }}
                     className="shrink-0 group relative"
                   >
@@ -1149,7 +1149,7 @@ function HomeContent({
                     <div className={`mt-3 text-center text-xs font-bold truncate tracking-wide ${isDark ? "text-slate-350" : "text-slate-600"}`}>
                       {ch.name}
                     </div>
-                  </div>
+                  </motion.div>
                 ))}
               </motion.div>
             </div>
@@ -1159,8 +1159,12 @@ function HomeContent({
           <div className="block md:hidden">
             <div className="grid grid-cols-2 xs:grid-cols-3 sm:grid-cols-4 gap-4 px-1 pb-4">
               {randomChannels.slice(0, 8).map((ch, idx) => (
-                <div 
+                <motion.div 
                   key={`home-grid-suggested-${ch.name}-${idx}`} 
+                  initial={{ opacity: 0, x: 30 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ type: "spring", stiffness: 100, damping: 15, delay: idx * 0.05 }}
                   className="group relative"
                 >
                   <ChannelCard 
@@ -1178,7 +1182,7 @@ function HomeContent({
                   <div className={`mt-2 text-center text-[11px] font-black truncate tracking-wide ${isDark ? "text-slate-400" : "text-slate-700"}`}>
                     {ch.name}
                   </div>
-                </div>
+                </motion.div>
               ))}
             </div>
           </div>
@@ -10170,6 +10174,7 @@ const [headingBar, setHeadingBar] = useState(() => {
   ]);
 
   const [searchQuery, setSearchQuery] = useState("");
+  const [isSearchFocused, setIsSearchFocused] = useState(false);
   const [isSearchLoading, setIsSearchLoading] = useState(false);
   const [searchResults, setSearchResults] = useState<any[]>([]);
   const [isListening, setIsListening] = useState(false);
@@ -10254,27 +10259,19 @@ const [headingBar, setHeadingBar] = useState(() => {
       setIsSearchLoading(true);
       const timer = setTimeout(() => {
         const query = searchQuery.toLowerCase().trim();
-        if (activeTab === "Cài đặt") {
-           const filtered = settingsOptions.filter(opt => 
-             opt.name.toLowerCase().includes(query) || 
-             opt.category.toLowerCase().includes(query)
-           );
-           setSearchResults(filtered);
-        } else {
-          const filtered = channels.filter(ch => 
-            ch.name.toLowerCase().includes(query) || 
-            ch.category?.toLowerCase().includes(query)
-          );
-          setSearchResults(filtered);
-        }
+        const filtered = channels.filter(ch => 
+          ch.name.toLowerCase().includes(query) || 
+          ch.category?.toLowerCase().includes(query)
+        );
+        setSearchResults(filtered);
         setIsSearchLoading(false);
-      }, activeTab === "Cài đặt" ? 100 : 3000);
+      }, 150);
       return () => clearTimeout(timer);
     } else {
       setSearchResults([]);
       setIsSearchLoading(false);
     }
-  }, [searchQuery, activeTab, settingsOptions]);
+  }, [searchQuery, channels]);
 
   const [showDevSettings, setShowDevSettings] = useState(false);
   const [showDevPrompt, setShowDevPrompt] = useState(false);
@@ -11230,7 +11227,7 @@ const [headingBar, setHeadingBar] = useState(() => {
               setHomeScrollY(0);
             }
           }}
-          className="flex-1 overflow-y-auto pb-32 flex flex-col w-full max-w-full overflow-x-hidden bg-transparent"
+          className={`flex-1 overflow-y-auto ${(displayTab === "Cài đặt" || displayTab === "Live") ? "pb-0" : "pb-32"} flex flex-col w-full max-w-full overflow-x-hidden bg-transparent`}
         >
           <AnimatePresence mode="wait">
             <motion.div
@@ -11242,7 +11239,7 @@ const [headingBar, setHeadingBar] = useState(() => {
                 duration: 0.6, 
                 ease: [0.23, 1, 0.32, 1] 
               }}
-              className="h-full flex flex-col pt-4 md:pt-8"
+              className={`h-full flex flex-col ${(displayTab === "Cài đặt" || displayTab === "Live") ? "pt-0" : "pt-4 md:pt-8"}`}
             >
               {displayTab === "Trang chủ" && (
                 <HomeContent 
@@ -11328,13 +11325,13 @@ const [headingBar, setHeadingBar] = useState(() => {
                 />
               )}
               {displayTab === "Cài đặt" && (
-                <div className="flex-1 overflow-hidden">
+                <div className="flex-1 overflow-hidden h-full w-full">
                    {isSettingsLoading ? (
                   <div className="h-full flex flex-col items-center justify-center gap-6">
                      <LoadingSpinner isDark={isDark} className="w-16 h-16" />
                   </div>
                ) : (
-                    <div id="settings-tab-container-main" className="p-2.5 xs:p-4 md:p-8 space-y-6 md:space-y-12 w-full max-w-full px-4 md:px-12 h-full flex flex-col pt-0">
+                    <div id="settings-tab-container-main" className="w-full h-full flex flex-col pt-0">
                         <RejuvenatedSettings
                           setSplashDuration={setSplashDuration}
                           isDark={isDark} 
@@ -11593,6 +11590,78 @@ const [headingBar, setHeadingBar] = useState(() => {
                     ? (isDark ? "bg-red-500/10 text-red-500 border border-red-500/20" : "bg-red-500/10 text-red-500 shadow-sm") 
                     : (isDark ? "bg-white/10 text-[#4AC4FE]" : "bg-black/5 text-[#4AC4FE] shadow-sm");
                   
+                  if ((tab.id || tab.name) === "Tìm kiếm" && isSidebarExpanded && !isCompact) {
+                    return (
+                      <div key={`side-nav-${tab.id || tab.name}-${idx}`} className="px-1.5 py-1 relative">
+                        <div className={`relative flex items-center gap-2.5 px-3.5 py-1.5 h-10 w-full group rounded-2xl overflow-hidden transition-all ${
+                          isDark 
+                            ? "bg-slate-800/60 text-white" 
+                            : "bg-slate-200 text-slate-900"
+                        }`}>
+                          <Icon size={16} className={`shrink-0 transition-colors ${
+                            isSearchFocused ? "text-[#4AC4FE]" : "text-slate-400"
+                          }`} />
+                          <input
+                            type="text"
+                            placeholder="Tìm kiếm kênh..."
+                            value={searchQuery}
+                            onFocus={() => setIsSearchFocused(true)}
+                            onBlur={() => setTimeout(() => setIsSearchFocused(false), 250)}
+                            onChange={(e) => setSearchQuery(e.target.value)}
+                            className={`bg-transparent border-none outline-none text-xs w-full font-bold placeholder-slate-500 font-google ${
+                              isDark ? "text-white" : "text-slate-900"
+                            }`}
+                          />
+                          <div className={`absolute bottom-0 left-1/2 -translate-x-1/2 h-[2px] w-[90%] transition-all duration-300 ${
+                            isDark ? "bg-white/5" : "bg-black/5"
+                          } ${isSearchFocused ? "bg-[#4AC4FE]" : ""}`} />
+                        </div>
+
+                        {/* Floating sidebar search results overlay */}
+                        <AnimatePresence>
+                          {isSearchFocused && searchQuery.trim().length > 0 && (
+                            <motion.div 
+                              initial={{ opacity: 0, scale: 0.95 }}
+                              animate={{ opacity: 1, scale: 1 }}
+                              exit={{ opacity: 0, scale: 0.95 }}
+                              className={`absolute ${isSidebarRight ? "right-[105%]" : "left-[105%]"} top-0 min-w-[280px] max-w-[320px] max-h-80 overflow-y-auto rounded-[24px] shadow-2xl border p-2 flex flex-col gap-1.5 z-[300] ${
+                                isDark ? "bg-[#181924]/95 border-white/10 text-white backdrop-blur-xl" : "bg-white/95 border-slate-200 text-slate-800 backdrop-blur-xl"
+                              }`}
+                            >
+                              <div className="text-[10px] uppercase font-bold px-3 py-1 tracking-widest text-[#4AC4FE]">
+                                Kênh kết quả ({searchResults.length})
+                              </div>
+                              {searchResults.slice(0, 10).map((ch, sIdx) => (
+                                <button
+                                  key={`sidebar-inline-search-res-${ch.name}-${sIdx}`}
+                                  onMouseDown={() => {
+                                    setActiveChannel(ch);
+                                    setActiveTab("Live");
+                                    setIsSearchFocused(false);
+                                  }}
+                                  className={`w-full text-left flex items-center gap-3 p-2 rounded-2xl transition-all ${
+                                    isDark ? "hover:bg-white/5 text-slate-300 hover:text-white" : "hover:bg-slate-100 text-slate-700 hover:text-slate-900"
+                                  }`}
+                                >
+                                  <img src={ch.logo} className="w-8 h-8 rounded-lg object-contain bg-slate-50 p-1 shrink-0" referrerPolicy="no-referrer" />
+                                  <div className="flex-1 min-w-0">
+                                    <p className="text-xs font-bold truncate">{ch.name}</p>
+                                    <span className="text-[9px] opacity-60 uppercase font-black tracking-wider">{ch.category}</span>
+                                  </div>
+                                </button>
+                              ))}
+                              {searchResults.length === 0 && (
+                                <div className="p-4 text-center text-xs opacity-50 font-bold">
+                                  Không tìm thấy kết quả
+                                </div>
+                              )}
+                            </motion.div>
+                          )}
+                        </AnimatePresence>
+                      </div>
+                    );
+                  }
+
                   return (
                     <Tooltip key={`side-nav-${tab.id || tab.name}-${idx}`} text={tab.name} isDark={isDark} position={isSidebarRight ? "left" : "right"} disabled={isSidebarExpanded && !isCompactMode}>
                       <button
@@ -11916,25 +11985,25 @@ const [headingBar, setHeadingBar] = useState(() => {
               <ChevronLeft size={24} />
             </button>
 
-            <div className="flex-1 overflow-hidden relative h-12 flex items-center justify-center">
-              <AnimatePresence mode="wait">
+            <div className="flex-1 overflow-hidden relative h-12 flex items-center justify-center w-full">
+              <AnimatePresence initial={false}>
                 <motion.div
                   key={`nav-page-${navPage}`}
-                  initial={{ x: 50, opacity: 0 }}
+                  initial={{ x: 60, opacity: 0 }}
                   animate={{ x: 0, opacity: 1 }}
-                  exit={{ x: -50, opacity: 0 }}
-                  transition={{ type: "spring", damping: 25, stiffness: 200 }}
-                  className="flex items-center justify-around w-full"
+                  exit={{ x: -100, opacity: 0, position: "absolute", transition: { duration: 0.15 } }}
+                  transition={{ type: "spring", damping: 20, stiffness: 220 }}
+                  className="absolute inset-x-0 top-0 bottom-0 flex items-center justify-around w-full h-full px-4"
                 >
                   {navPage === 0 && (
                     <>
-                      {baseTabs.filter(t => ["Trang chủ", "Tìm kiếm", "Live", "Cài đặt"].includes(t.id || t.name)).map((tab) => {
+                      {baseTabs.filter(t => ["Trang chủ", "Live", "Cài đặt"].includes(t.id || t.name)).map((tab) => {
                         const Icon = tab.icon;
                         const tabId = tab.id || tab.name;
                         const isActive = activeTab === tabId;
                         const isGlassy = liquidGlass === "glassy";
                         const isLiveTab = tabId === "Live";
-                        
+
                         return (
                           <div key={`mob-nav-${tabId}`} className="flex-1 flex justify-center">
                             <button
@@ -11948,7 +12017,7 @@ const [headingBar, setHeadingBar] = useState(() => {
                                 }
                                 setActiveTab(tabId);
                               }}
-                              className={`relative flex flex-col items-center justify-center px-1 py-2 transition-all duration-300 group z-10 w-full ${
+                              className={`relative flex flex-col items-center justify-center px-1 py-1 transition-all duration-300 group z-10 w-full ${
                                 isActive 
                                   ? (isLiveTab ? "text-red-500" : "text-[#4AC4FE]") 
                                   : isGlassy ? "text-white/70 hover:text-white" : liquidGlass === "tinted" ? "text-black hover:opacity-100 opacity-60" : isDark ? "text-slate-400 hover:text-white" : "text-black hover:opacity-100"
@@ -11980,68 +12049,110 @@ const [headingBar, setHeadingBar] = useState(() => {
                           </div>
                         );
                       })}
+                      {/* Đăng nhập / Đăng xuất button */}
+                      <div className="flex-1 flex justify-center">
+                        <button
+                          onClick={user ? handleLogout : handleLogin}
+                          className={`relative flex flex-col items-center justify-center px-1 py-1 transition-all duration-300 group z-10 w-full ${
+                            isDark ? "text-slate-400 hover:text-white" : "text-slate-650 hover:text-black"
+                          }`}
+                        >
+                          <motion.div
+                            initial={{ scale: 1 }}
+                            whileTap={{ scale: 0.9 }}
+                            className="z-10 relative flex flex-col items-center justify-center"
+                          >
+                            {user ? <SignOutIcon size={26} /> : <SignInIcon size={26} />}
+                          </motion.div>
+                        </button>
+                      </div>
                     </>
                   )}
 
                   {navPage === 1 && (
-                    <div className="flex w-full items-center justify-around h-full">
-                      {baseTabs.filter(t => ["Quản trị"].includes(t.id || t.name)).filter(t => t.id !== "Quản trị" || isAdmin).map((tab) => {
-                        const Icon = tab.icon;
-                        const tabId = tab.id || tab.name;
-                        const isActive = activeTab === tabId;
-                        const isGlassy = liquidGlass === "glassy";
-                        
-                        return (
-                          <div key={`mob-nav-${tabId}`} className="flex-1 flex justify-center">
-                            <button
-                              onClick={() => {
-                                if (tabId === "Live" && isBroadcastingLocked) {
-                                  setIsLockModalOpen(true);
-                                  return;
-                                }
-                                setActiveTab(tabId);
-                              }}
-                              className={`relative flex flex-col items-center justify-center px-1 py-2 transition-all duration-300 group z-10 w-full ${
-                                isActive 
-                                  ? "text-[#4AC4FE]" 
-                                  : isGlassy ? "text-white/70 hover:text-white" : liquidGlass === "tinted" ? "text-black hover:opacity-100 opacity-60" : isDark ? "text-slate-400 hover:text-white" : "text-black hover:opacity-100"
-                              }`}
-                            >
-                              {isActive && liquidGlass && (
-                                <motion.div
-                                  layoutId="activeTabPill"
-                                  className={`absolute inset-0 rounded-full z-[-1] shadow-[0_4px_12px_rgba(0,0,0,0.1)] ${
-                                    isGlassy ? "bg-white/20" : "bg-white"
-                                  }`}
-                                  transition={{ type: "spring", bounce: 0.5, duration: 0.6 }}
-                                />
-                              )}
-                              <motion.div
-                                initial={{ scale: 1 }}
-                                animate={{ scale: isActive ? 1.1 : 1 }}
-                                whileTap={{ scale: 0.9 }}
-                                className="z-10"
+                    <div className="flex w-full items-center gap-2 px-2.5 h-full relative">
+                      {/* Search box overlay for results */}
+                      <AnimatePresence>
+                        {isSearchFocused && searchQuery.trim().length > 0 && (
+                          <motion.div 
+                            initial={{ opacity: 0, y: 15 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            exit={{ opacity: 0, y: 15 }}
+                            className={`absolute left-0 right-0 bottom-[120%] mb-2 z-[200] max-h-72 overflow-y-auto rounded-3xl shadow-2xl border p-2 flex flex-col gap-1.5 ${
+                              isDark ? "bg-[#181924]/95 border-white/10 text-white backdrop-blur-xl" : "bg-white/95 border-slate-200 text-slate-800 backdrop-blur-xl"
+                            }`}
+                          >
+                            <div className="text-[9px] uppercase font-bold px-2 py-1 tracking-widest text-[#4AC4FE]">
+                              Kênh kết quả ({searchResults.length})
+                            </div>
+                            {searchResults.slice(0, 10).map((ch, idx) => (
+                              <button
+                                key={`mob-inline-search-res-${ch.name}-${idx}`}
+                                onMouseDown={() => {
+                                  setActiveChannel(ch);
+                                  setActiveTab("Live");
+                                  setIsSearchFocused(false);
+                                }}
+                                className={`w-full text-left flex items-center gap-3 p-2 rounded-2xl transition-all ${
+                                  isDark ? "hover:bg-white/5 text-slate-300 hover:text-white" : "hover:bg-slate-100 text-slate-705 hover:text-slate-900"
+                                }`}
                               >
-                                <Icon className="h-7 w-7 flex-shrink-0" />
-                              </motion.div>
-                            </button>
-                          </div>
-                        );
-                      })}
-                      <div className="flex-1 flex justify-center">
-                        <button
-                          onClick={user ? handleLogout : handleLogin}
-                          className={`p-3 rounded-full transition-all ${
-                            user 
-                              ? (isDark ? "bg-red-500/10 text-red-400 hover:bg-red-500/20" : "bg-red-50 text-red-500 hover:bg-red-100")
-                              : (isDark ? "bg-emerald-500/10 text-emerald-400 hover:bg-emerald-500/20" : "bg-emerald-50 text-emerald-500 hover:bg-emerald-100")
-                          }`}
-                        >
-                          <div className="scale-110">
-                            {user ? <SignOutIcon size={28} /> : <SignInIcon size={28} />}
-                          </div>
-                        </button>
+                                <img src={ch.logo} className="w-8 h-8 rounded-lg object-contain bg-slate-50 p-1 shrink-0" referrerPolicy="no-referrer" />
+                                <div className="flex-1 min-w-0">
+                                  <p className="text-xs font-bold truncate">{ch.name}</p>
+                                  <span className="text-[9px] opacity-60 uppercase font-black tracking-wider">{ch.category}</span>
+                                </div>
+                              </button>
+                            ))}
+                            {searchResults.length === 0 && (
+                              <div className="p-4 text-center text-xs opacity-50 font-bold">
+                                Không tìm thấy kết quả
+                              </div>
+                            )}
+                          </motion.div>
+                        )}
+                      </AnimatePresence>
+
+                      <div className="flex-1 flex items-center justify-center">
+                        <div className={`relative flex items-center gap-2.5 px-3.5 py-1.5 h-10 w-full group rounded-2xl overflow-hidden transition-all ${
+                          isDark 
+                            ? "bg-slate-800/60 text-white" 
+                            : "bg-slate-200 text-slate-900"
+                        }`}>
+                          <SearchIcon size={14} className={`shrink-0 transition-colors ${
+                            isSearchFocused ? "text-[#4AC4FE]" : "text-slate-400"
+                          }`} />
+                          <input
+                            type="text"
+                            placeholder="Tìm kiếm kênh..."
+                            value={searchQuery}
+                            onFocus={() => setIsSearchFocused(true)}
+                            onBlur={() => setTimeout(() => setIsSearchFocused(false), 250)}
+                            onChange={(e) => setSearchQuery(e.target.value)}
+                            className={`bg-transparent border-none outline-none text-xs w-full font-bold placeholder-slate-500 font-google ${
+                              isDark ? "text-white" : "text-slate-900"
+                            }`}
+                          />
+                          <div className={`absolute bottom-0 left-1/2 -translate-x-1/2 h-[2px] w-[90%] transition-all duration-300 ${
+                            isDark ? "bg-white/5" : "bg-black/5"
+                          } ${isSearchFocused ? "bg-[#4AC4FE]" : ""}`} />
+                        </div>
                       </div>
+
+                      {isAdmin && (
+                        <div className="flex-shrink-0 flex justify-center">
+                          <button
+                            onClick={() => setActiveTab("Quản trị")}
+                            className={`p-2 rounded-full transition-all ${
+                              activeTab === "Quản trị"
+                                ? isDark ? "bg-[#4AC4FE]/10 text-[#4AC4FE]" : "bg-black/5 text-[#4AC4FE]"
+                                : isDark ? "text-slate-400 hover:text-white" : "text-black hover:opacity-100 opacity-60"
+                            }`}
+                          >
+                            <AdminIcon className="h-6 w-6" />
+                          </button>
+                        </div>
+                      )}
                     </div>
                   )}
 
@@ -12051,20 +12162,54 @@ const [headingBar, setHeadingBar] = useState(() => {
                         setIsWidgetsOpen(true);
                         setActiveDashboardTab("widgets");
                       }}
-                      className="flex flex-col items-center justify-center h-full gap-0 cursor-pointer hover:opacity-85 transition-all active:scale-95"
+                      className="flex items-center justify-center gap-3 h-full cursor-pointer hover:opacity-85 transition-all active:scale-95"
                       initial={{ scale: 0.9, opacity: 0 }}
                       animate={{ scale: 1, opacity: 1 }}
                     >
-                      <div className={`text-sm font-bold tracking-tight ${isDark ? "text-white" : "text-slate-900"}`}>
-                        {formatTime(currentTime || new Date())}
+                      {/* Clock & Date */}
+                      <div className="flex flex-col items-end justify-center">
+                        <div className={`text-xs md:text-sm font-extrabold tracking-tight leading-none ${isDark ? "text-white" : "text-slate-900"}`}>
+                          {formatTime(currentTime || new Date())}
+                        </div>
+                        <div className={`text-[8.5px] font-bold tracking-wider uppercase leading-none mt-1 ${isDark ? "text-white/40" : "text-slate-500"}`}>
+                          {formatDateString(currentTime || new Date())}
+                        </div>
                       </div>
-                      <div className={`text-[10px] font-bold tracking-widest uppercase ${isDark ? "text-white/40" : "text-slate-500"}`}>
-                        {formatDateString(currentTime || new Date())}
-                      </div>
+
+                      {/* Divider */}
+                      {weather && (
+                        <div className={`w-[1px] h-5 self-center ${isDark ? "bg-white/10" : "bg-slate-300"}`} />
+                      )}
+
+                      {/* Temperature */}
+                      {weather && (
+                        <div className="flex items-center gap-1">
+                          <span className={`text-xs md:text-sm font-black ${isDark ? "text-[#4AC4FE]" : "text-[#4AC4FE]"}`}>
+                            {getTempDisplay()}
+                          </span>
+                        </div>
+                      )}
                     </motion.div>
                   )}
                 </motion.div>
               </AnimatePresence>
+            </div>
+
+            {/* Dots indicator */}
+            <div className="absolute bottom-1.5 left-1/2 -translate-x-1/2 flex gap-1 z-30 pointer-events-none">
+              {[0, 1, 2].map((p) => {
+                const isActive = navPage === p;
+                return (
+                  <div
+                    key={`nav-dot-${p}`}
+                    className={`w-1 h-1 rounded-full transition-all duration-300 ${
+                      isActive 
+                        ? "bg-[#4AC4FE] w-3" 
+                        : isDark ? "bg-white/20" : "bg-black/20"
+                    }`}
+                  />
+                );
+              })}
             </div>
 
             {/* Next Arrow */}
