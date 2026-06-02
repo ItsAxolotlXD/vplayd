@@ -465,7 +465,8 @@ function ChannelLogo({ src, alt, className, isDark, liquidGlass, status }: { src
       : "https://static.wikia.nocookie.net/ftv/images/7/7f/Vtd.png/revision/latest/scale-to-width-down/1000?cb=20260601094859&path-prefix=vi";
   }
 
-  const scaleClass = "scale-[1.1]";
+  const isShrunk = alt.includes("THVL") || alt.includes("Vĩnh Long") || alt.includes("QNgTV") || alt.includes("Quảng Ngãi");
+  const scaleClass = isShrunk ? "scale-[0.8]" : "scale-[1.1]";
 
   const isVTV5_TN = alt === "VTV5 Tây Nguyên";
   const isVTV5_TNB = alt === "VTV5 Tây Nam Bộ";
@@ -2908,48 +2909,93 @@ function TVContent({ active, setActive, isDark, favorites, toggleFavorite, user,
                 </button>
               </div>
 
-              {/* Schedule List content inside mobile modal */}
-              <div className="flex-1 overflow-y-auto pr-1 space-y-2.5 pb-8 no-scrollbar scrollbar-none">
-                {scheduleItems.map((item) => {
-                  const isActive = item.hour === currentHour;
+              {/* Day Selector */}
+              <div className="flex gap-1 overflow-x-auto no-scrollbar py-1 shrink-0 mb-3 border-b border-slate-500/10">
+                {dayOptions.map((opt) => {
+                  const isSelected = selectedDayOffset === opt.offset;
                   return (
-                    <div
-                      key={`mobile-sched-${item.hour}`}
-                      className={`flex items-start gap-4 p-3 rounded-2xl transition-all duration-300 relative ${
-                        isActive 
-                          ? (isDark 
-                              ? "bg-gradient-to-r from-[#4AC4FE]/20 to-transparent border border-[#4AC4FE]/30 text-white shadow-md shadow-[#4AC4FE]/5"
-                              : "bg-gradient-to-r from-[#4AC4FE]/10 to-transparent border border-[#4AC4FE]/20 text-[#0c4a6e] shadow-sm")
-                          : (isDark 
-                              ? "hover:bg-white/5 border border-transparent text-white/70 hover:text-white"
-                              : "hover:bg-slate-50 border border-transparent text-slate-600 hover:text-slate-900")
+                    <button
+                      key={`day-opt-mobile-${opt.offset}`}
+                      onClick={() => setSelectedDayOffset(opt.offset)}
+                      className={`flex flex-col items-center justify-center px-3 py-1 min-w-[50px] rounded-lg transition-all text-center select-none shrink-0 ${
+                        isSelected
+                          ? "bg-[#4AC4FE] text-slate-950 font-bold"
+                          : isDark
+                            ? "bg-white/5 text-white/50 hover:bg-white/10 hover:text-white"
+                            : "bg-slate-100 text-slate-600 hover:bg-slate-200"
                       }`}
                     >
-                      {/* Time Badge */}
-                      <div className={`font-mono text-xs font-bold px-2 py-0.5 rounded-lg shrink-0 ${
-                        isActive 
-                          ? "bg-[#4AC4FE] text-black shadow-sm"
-                          : (isDark ? "bg-white/5 text-white/50" : "bg-slate-200 text-slate-500")
-                      }`}>
-                        {item.time}
-                      </div>
-
-                      {/* Program Title */}
-                      <div className="flex-1 space-y-0.5">
-                        <p className={`text-[11px] sm:text-xs leading-tight font-black uppercase tracking-tight ${
-                          isActive ? "text-[#4AC4FE]" : ""
-                        }`}>
-                          {item.title}
-                        </p>
-                        {isActive && (
-                          <div className="flex items-center gap-1">
-                            <span className="text-[9px] font-bold text-red-500 uppercase tracking-widest animate-pulse">• ĐANG PHÁT TRỰC TIẾP</span>
-                          </div>
-                        )}
-                      </div>
-                    </div>
+                      <span className="text-[10px] font-bold tracking-tight whitespace-nowrap">{opt.label}</span>
+                      <span className={`text-[8px] font-medium opacity-75 ${isSelected ? "text-slate-900/80" : "text-slate-400"}`}>{opt.desc}</span>
+                    </button>
                   );
                 })}
+              </div>
+
+              {/* Schedule List content inside mobile modal */}
+              <div className="flex-1 overflow-y-auto pr-1 space-y-2.5 pb-8 no-scrollbar scrollbar-none flex flex-col">
+                {selectedDayOffset < 0 ? (
+                  <div className="flex-1 flex flex-col items-center justify-center text-center p-6 space-y-3 opacity-60">
+                    <div className="p-3 bg-red-500/10 rounded-full text-red-500">
+                      <Calendar size={24} />
+                    </div>
+                    <div>
+                      <p className="text-xs font-bold uppercase tracking-wider text-red-500">Đã hết hạn xem</p>
+                      <p className="text-xs text-slate-400 mt-1 max-w-[200px] mx-auto">Lịch phát sóng đã hết thời hạn xem lại</p>
+                    </div>
+                  </div>
+                ) : selectedDayOffset > 0 ? (
+                  <div className="flex-1 flex flex-col items-center justify-center text-center p-6 space-y-3 opacity-60">
+                    <div className="p-3 bg-amber-500/10 rounded-full text-amber-500">
+                      <Calendar size={24} />
+                    </div>
+                    <div>
+                      <p className="text-xs font-bold uppercase tracking-wider text-amber-500">Chưa cập nhật</p>
+                      <p className="text-xs text-slate-400 mt-1 max-w-[200px] mx-auto">Lịch phát sóng chưa được cập nhật</p>
+                    </div>
+                  </div>
+                ) : (
+                  scheduleItems.map((item) => {
+                    const isActive = item.hour === currentHour;
+                    return (
+                      <div
+                        key={`mobile-sched-${item.hour}`}
+                        className={`flex items-start gap-4 p-3 rounded-2xl transition-all duration-300 relative ${
+                          isActive 
+                            ? (isDark 
+                                ? "bg-gradient-to-r from-[#4AC4FE]/20 to-transparent border border-[#4AC4FE]/30 text-white shadow-md shadow-[#4AC4FE]/5"
+                                : "bg-gradient-to-r from-[#4AC4FE]/10 to-transparent border border-[#4AC4FE]/20 text-[#0c4a6e] shadow-sm")
+                            : (isDark 
+                                ? "hover:bg-white/5 border border-transparent text-white/70 hover:text-white"
+                                : "hover:bg-slate-50 border border-transparent text-slate-600 hover:text-slate-900")
+                        }`}
+                      >
+                        {/* Time Badge */}
+                        <div className={`font-mono text-xs font-bold px-2 py-0.5 rounded-lg shrink-0 ${
+                          isActive 
+                            ? "bg-[#4AC4FE] text-black shadow-sm"
+                            : (isDark ? "bg-white/5 text-white/50" : "bg-slate-200 text-slate-500")
+                        }`}>
+                          {item.time}
+                        </div>
+
+                        {/* Program Title */}
+                        <div className="flex-1 space-y-0.5">
+                          <p className={`text-[11px] sm:text-xs leading-tight font-black uppercase tracking-tight ${
+                            isActive ? "text-[#4AC4FE]" : ""
+                          }`}>
+                            {item.title}
+                          </p>
+                          {isActive && (
+                            <div className="flex items-center gap-1">
+                              <span className="text-[9px] font-bold text-red-500 uppercase tracking-widest animate-pulse">• ĐANG PHÁT TRỰC TIẾP</span>
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                    );
+                  })
+                )}
               </div>
             </motion.div>
           </div>
@@ -2987,7 +3033,8 @@ function SearchPopup({
   setFeatureFlags,
   setIsSidebarLocked,
   setSearchQuery,
-  searchFilter
+  searchFilter,
+  onContextMenu
 }: { 
   isDark: boolean, 
   searchQuery: string, 
@@ -3016,7 +3063,8 @@ function SearchPopup({
   setIsSidebarLocked?: (val: boolean) => void,
   setSearchQuery?: (val: string) => void,
   searchFilter?: "all" | "channels" | "settings" | "experiments",
-  handleOpenSettings: () => void
+  handleOpenSettings: () => void,
+  onContextMenu?: (e: React.MouseEvent) => void
 }) {
   if (searchQuery.trim() === "" && !asContent) return null;
 
@@ -11344,6 +11392,7 @@ const [headingBar, setHeadingBar] = useState(() => {
               <div className={`flex-1 px-3 space-y-1 overflow-y-auto ${isCompactMode && isSidebarExpanded ? "no-scrollbar px-1.5 flex flex-col items-center" : "custom-scrollbar"}`}>
                 {tabs.map((tab, idx) => {
                   const Icon = tab.icon;
+                  const isCompact = isCompactMode && isSidebarExpanded;
                   const isActive = activeTab === (tab.id || tab.name) || 
                                    (tab.id === "Widgets" && isWidgetsOpen && activeDashboardTab === "widgets") ||
                                    (tab.id === "Cài đặt" && isWidgetsOpen && activeDashboardTab === "settings");
