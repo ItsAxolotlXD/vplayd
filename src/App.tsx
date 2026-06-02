@@ -16,6 +16,16 @@ import { doc, getDoc, setDoc, collection, getDocs, serverTimestamp, updateDoc, a
 
 import { channels, Channel } from "./channels";
 
+export interface ToastMessage {
+  id: string;
+  message: string;
+  type: "success" | "error" | "info" | "warning";
+}
+
+export function showToast(message: string, type: "success" | "error" | "info" | "warning" = "success") {
+  window.dispatchEvent(new CustomEvent("vplay-toast", { detail: { message, type } }));
+}
+
 const HomeIcon = ({ className, size, strokeWidth }: { className?: string, size?: number | string, strokeWidth?: number }) => <Home className={className} size={size || 22} strokeWidth={strokeWidth || 1.5} />;
 const TvIcon = ({ className, size, strokeWidth }: { className?: string, size?: number | string, strokeWidth?: number }) => <Radio className={className} size={size || 22} strokeWidth={strokeWidth || 1.5} />;
 const SettingsIcon = ({ className, size, strokeWidth }: { className?: string, size?: number | string, strokeWidth?: number }) => <Settings className={className} size={size || 22} strokeWidth={strokeWidth || 1.5} />;
@@ -449,11 +459,11 @@ function FloatingTooltip({ text, show, targetRect }: { text: string, show: boole
 function ChannelLogo({ src, alt, className, isDark, liquidGlass, status }: { src: string, alt: string, className?: string, isDark: boolean, liquidGlass?: "glassy" | "tinted", status?: string }) {
   const [error, setError] = useState(false);
 
-  if (error || !src) {
+  if (error || !src || src === "LOGO THÊM VÀO SAU") {
     return (
-      <div className={`${className} flex flex-col items-center justify-center bg-slate-800/50 rounded-[23px] border border-slate-700/50 p-1 text-center`}>
-        <TvIcon size={24} className={liquidGlass === "tinted" ? "text-black" : "text-slate-500 mb-1"} />
-        <span className={`text-[10px] font-bold leading-tight line-clamp-2 uppercase ${liquidGlass === "tinted" ? "text-black/60" : "opacity-60"}`}>{alt}</span>
+      <div className={`${className || "w-full h-full"} flex flex-col items-center justify-center bg-slate-800/50 rounded-[23px] border border-slate-700/50 p-3 text-center`}>
+        <TvIcon size={24} className={liquidGlass === "tinted" ? "text-black" : "text-slate-500 mb-2"} />
+        <span className={`text-[10px] font-black leading-tight line-clamp-2 uppercase ${liquidGlass === "tinted" ? "text-black/80" : "text-white/80"}`}>{src === "LOGO THÊM VÀO SAU" ? "LOGO THÊM VÀO SAU" : alt}</span>
       </div>
     );
   }
@@ -565,6 +575,12 @@ function ChannelCard({ ch, onClick, isDark, isActive, favorites, toggleFavorite,
         {isComingSoon && !isVTV6 && (
           <div className="absolute top-2 left-2 bg-blue-500 text-white text-[8px] font-bold px-1.5 py-0.5 rounded-md z-20 shadow-md uppercase">
             SẮP RA MẮT
+          </div>
+        )}
+
+        {ch.qualityBadge && (
+          <div className="absolute bottom-2 left-2 bg-orange-500 text-white text-[9px] font-black px-1.5 py-0.5 rounded-md z-20 shadow-md">
+            {ch.qualityBadge}
           </div>
         )}
         
@@ -1628,6 +1644,18 @@ function TVContent({ active, setActive, isDark, favorites, toggleFavorite, user,
   const [showQualityMenu, setShowQualityMenu] = useState(false);
   const [filterType, setFilterType] = useState<string>("Tất cả");
   const [streamError, setStreamError] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (streamError) {
+      showToast("Lỗi luồng phát kênh", "error");
+    }
+  }, [streamError]);
+
+  useEffect(() => {
+    if (active.status === "maintenance") {
+      showToast("Kênh hiện đang được bảo trì", "warning");
+    }
+  }, [active]);
 
   // categories definition removed to avoid duplication
 
@@ -3980,6 +4008,44 @@ function RejuvenatedSettings(props: any) {
                 <span className="text-xs md:text-sm font-bold text-emerald-500">ỔN ĐỊNH</span>
               </div>
             </div>
+
+            {/* Sponsor and Contributor Section */}
+            <div className={`p-6 md:p-10 rounded-[24px] md:rounded-[40px] border ${isDark ? "bg-vplay-background/40 border-white/10 shadow-inner" : "bg-white border-slate-200 shadow-sm"}`}>
+              <div className="flex items-center gap-3 mb-5">
+                <div className={`p-2 rounded-xl ${isDark ? "bg-red-500/10 text-red-500" : "bg-red-500/10 text-red-500"}`}>
+                  <Heart className="text-red-500 fill-red-500 shrink-0" size={20} />
+                </div>
+                <h4 className={`text-lg md:text-xl font-bold tracking-tight ${isDark ? "text-white" : "text-slate-900"}`}>Thành viên hỗ trợ & Đóng góp</h4>
+              </div>
+              
+              <p className={`text-xs md:text-sm leading-relaxed mb-6 ${isDark ? "text-slate-300" : "text-slate-600"}`}>
+                <Heart className="text-red-500 fill-red-500 inline-block mr-1 align-text-top" size={14} /> Cảm ơn những thành viên trên Discord đã góp ý và hỗ trợ chúng tôi trong quá trình phát triển và hoàn thiện sản phẩm. Danh sách dưới đây xếp theo thứ tự bảng chữ cái
+              </p>
+
+              <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                {/* Chủ Thớt: VNRT */}
+                <div className={`col-span-2 sm:col-span-3 p-4 rounded-2xl flex items-center justify-between border ${isDark ? "bg-[#4AC4FE]/5 border-[#4AC4FE]/20" : "bg-[#4AC4FE]/10 border-[#4AC4FE]/20"}`}>
+                  <div className="flex items-center gap-3">
+                    <Crown className="text-yellow-400 fill-yellow-400 shrink-0" size={20} />
+                    <div>
+                      <p className={`text-[10px] font-black uppercase tracking-widest ${isDark ? "text-[#4AC4FE]" : "text-sky-600"}`}>Chủ Thớt</p>
+                      <p className={`text-base font-black ${isDark ? "text-white" : "text-slate-900"}`}>VNRT</p>
+                    </div>
+                  </div>
+                  <span className={`text-[10.5px] font-bold px-3 py-1 rounded-xl uppercase tracking-wider ${isDark ? "bg-white/5 text-white/60" : "bg-slate-100 text-slate-600"}`}>Sáng lập viên</span>
+                </div>
+
+                {/* Companion Members List */}
+                {["bsod99", "DHA", "Kousei Huynh", "notaguy1408", "shortlinus", "TV Archive Official", "VNTV"].map((member) => (
+                  <div key={member} className={`p-3 rounded-xl flex items-center gap-2.5 transition-all hover:scale-[1.02] border ${isDark ? "bg-white/[0.02] border-white/5 hover:bg-white/[0.04]" : "bg-slate-50 border-slate-100 hover:bg-slate-100/50"}`}>
+                    <span className="text-red-500 text-[10px]">❤️</span>
+                    <span className={`text-xs font-bold truncate ${isDark ? "text-slate-200" : "text-slate-700"}`}>
+                      {member}
+                    </span>
+                  </div>
+                ))}
+              </div>
+            </div>
           </div>
         );
       }
@@ -5757,6 +5823,7 @@ function AuthModal({ isOpen, onClose, isDark, liquidGlass, setIsDev, setUserData
         setSuccess("Yêu cầu đặt lại mật khẩu đã được gửi đến email của bạn.");
       } else if (isLogin) {
         await signInWithEmailAndPassword(auth, email, password);
+        showToast("Đăng nhập thành công", "success");
         onClose();
       } else {
         if (password.length < 6) {
@@ -5766,9 +5833,13 @@ function AuthModal({ isOpen, onClose, isDark, liquidGlass, setIsDev, setUserData
         }
         const userCred = await createUserWithEmailAndPassword(auth, email, password);
         await updateProfile(userCred.user, { displayName: username.split('@')[0] });
+        showToast("Đăng nhập thành công", "success");
         onClose();
       }
     } catch (err: any) {
+      if (!isForgotPassword) {
+        showToast("Đăng nhập không thành công", "error");
+      }
       const code = err.code;
       if (code === 'auth/invalid-credential' || code === 'auth/wrong-password' || code === 'auth/user-not-found') {
         setError("Tên đăng nhập hoặc mật khẩu không chính xác.");
@@ -5811,9 +5882,11 @@ function AuthModal({ isOpen, onClose, isDark, liquidGlass, setIsDev, setUserData
     try {
       const provider = new GoogleAuthProvider();
       await signInWithPopup(auth, provider);
+      showToast("Đăng nhập thành công", "success");
       onClose();
     } catch (err: any) {
       if (err.code !== 'auth/popup-closed-by-user' && err.code !== 'auth/cancelled-popup-request') {
+        showToast("Đăng nhập không thành công", "error");
         console.error("Google Auth Error:", err);
       }
       
@@ -9345,6 +9418,31 @@ function GeoPopup({ isOpen, onClose, isDark, onAutoSelect, onManualSelect }: {
 }
 
 function App() {
+  const [toasts, setToasts] = useState<ToastMessage[]>([]);
+
+  useEffect(() => {
+    const handleToast = (e: Event) => {
+      const customEvent = e as CustomEvent<{ message: string; type?: "success" | "error" | "info" | "warning" }>;
+      if (customEvent.detail) {
+        const id = Math.random().toString(36).substring(2, 9);
+        const newToast: ToastMessage = {
+          id,
+          message: customEvent.detail.message,
+          type: customEvent.detail.type || "success"
+        };
+        setToasts(prev => [...prev, newToast]);
+        setTimeout(() => {
+          setToasts(prev => prev.filter(t => t.id !== id));
+        }, 4000);
+      }
+    };
+
+    window.addEventListener("vplay-toast", handleToast);
+    return () => {
+      window.removeEventListener("vplay-toast", handleToast);
+    };
+  }, []);
+
   const [searchFilter, setSearchFilter] = useState<"all" | "channels" | "settings" | "experiments">("all");
   const [contextMenu, setContextMenu] = useState<{ x: number, y: number, type: "search" | "unified" } | null>(null);
   const [isMobileContextMenuOpen, setIsMobileContextMenuOpen] = useState(false);
@@ -9983,6 +10081,94 @@ const [headingBar, setHeadingBar] = useState(() => {
     return () => clearInterval(timer);
   }, []);
 
+  // Track setting changes to display "Đã thay đổi cài đặt xyz" toasts
+  const isFirstSettingsMount = useRef(true);
+  const prevSettingsInfo = useRef({
+    liquidGlass,
+    useSidebar,
+    isSidebarRight,
+    isSidebarLocked,
+    sidebarDisplay,
+    isPinningEnabled,
+    tempUnit,
+    timeFormat,
+    clockFormat,
+    dateFormat,
+    showTempInClock,
+    showClock,
+    showDate,
+    loadingTreatment
+  });
+
+  useEffect(() => {
+    if (isFirstSettingsMount.current) {
+      isFirstSettingsMount.current = false;
+      return;
+    }
+    const prev = prevSettingsInfo.current;
+
+    if (prev.liquidGlass !== liquidGlass) {
+      showToast(`Đã thay đổi cài đặt Phong cách kính: ${liquidGlass === "glassy" ? "Thủy tinh" : "Pha màu"}`, "info");
+      prev.liquidGlass = liquidGlass;
+    }
+    if (prev.useSidebar !== useSidebar) {
+      showToast(`Đã thay đổi cài đặt Hiển thị Sidebar: ${useSidebar ? "Bật" : "Tắt"}`, "info");
+      prev.useSidebar = useSidebar;
+    }
+    if (prev.isSidebarRight !== isSidebarRight) {
+      showToast(`Đã thay đổi cài đặt Vị trí Sidebar: ${isSidebarRight ? "Thanh bên phải" : "Thanh bên trái"}`, "info");
+      prev.isSidebarRight = isSidebarRight;
+    }
+    if (prev.isSidebarLocked !== isSidebarLocked) {
+      showToast(`Đã thay đổi cài đặt Khóa Sidebar: ${isSidebarLocked ? "Khóa cố định" : "Tự động ẩn"}`, "info");
+      prev.isSidebarLocked = isSidebarLocked;
+    }
+    if (prev.sidebarDisplay !== sidebarDisplay) {
+      showToast(`Đã thay đổi cài đặt Chế độ hiển thị Sidebar: ${sidebarDisplay === "float" ? "Nổi" : "Chắp cạnh"}`, "info");
+      prev.sidebarDisplay = sidebarDisplay;
+    }
+    if (prev.isPinningEnabled !== isPinningEnabled) {
+      showToast(`Đã thay đổi cài đặt Cho phép ghim widget: ${isPinningEnabled ? "Bật" : "Tắt"}`, "info");
+      prev.isPinningEnabled = isPinningEnabled;
+    }
+    if (prev.tempUnit !== tempUnit) {
+      showToast(`Đã thay đổi cài đặt Đơn vị nhiệt độ: °${tempUnit}`, "info");
+      prev.tempUnit = tempUnit;
+    }
+    if (prev.timeFormat !== timeFormat) {
+      showToast(`Đã thay đổi cài đặt Định dạng giờ: ${timeFormat}`, "info");
+      prev.timeFormat = timeFormat;
+    }
+    if (prev.clockFormat !== clockFormat) {
+      showToast(`Đã thay đổi cài đặt Kiểu hiển thị giờ: ${clockFormat}`, "info");
+      prev.clockFormat = clockFormat;
+    }
+    if (prev.dateFormat !== dateFormat) {
+      showToast(`Đã thay đổi cài đặt Định dạng ngày tháng: ${dateFormat}`, "info");
+      prev.dateFormat = dateFormat;
+    }
+    if (prev.showTempInClock !== showTempInClock) {
+      showToast(`Đã thay đổi cài đặt Hiển thị nhiệt độ: ${showTempInClock ? "Hiện" : "Ẩn"}`, "info");
+      prev.showTempInClock = showTempInClock;
+    }
+    if (prev.showClock !== showClock) {
+      showToast(`Đã thay đổi cài đặt Hiển thị đồng hồ: ${showClock ? "Hiện" : "Ẩn"}`, "info");
+      prev.showClock = showClock;
+    }
+    if (prev.showDate !== showDate) {
+      showToast(`Đã thay đổi cài đặt Hiển thị ngày tháng: ${showDate ? "Hiện" : "Ẩn"}`, "info");
+      prev.showDate = showDate;
+    }
+    if (prev.loadingTreatment !== loadingTreatment) {
+      showToast(`Đã thay đổi cài đặt Kiểu tải trang: ${loadingTreatment}`, "info");
+      prev.loadingTreatment = loadingTreatment;
+    }
+  }, [
+    liquidGlass, useSidebar, isSidebarRight, isSidebarLocked, sidebarDisplay,
+    isPinningEnabled, tempUnit, timeFormat, clockFormat, dateFormat,
+    showTempInClock, showClock, showDate, loadingTreatment
+  ]);
+
   const [searchQuery, setSearchQuery] = useState("");
   const [isSearchLoading, setIsSearchLoading] = useState(false);
   const [searchResults, setSearchResults] = useState<any[]>([]);
@@ -10197,11 +10383,16 @@ const [headingBar, setHeadingBar] = useState(() => {
   }, [favorites]);
 
   const toggleFavorite = (ch: typeof channels[0]) => {
-    setFavorites(prev => 
-      prev.includes(ch.name) 
-        ? prev.filter(name => name !== ch.name) 
-        : [...prev, ch.name]
-    );
+    setFavorites(prev => {
+      const exists = prev.includes(ch.name);
+      if (exists) {
+        showToast("Đã loại bỏ khỏi danh sách yêu thích", "info");
+        return prev.filter(name => name !== ch.name);
+      } else {
+        showToast("Đã thêm vào danh sách yêu thích", "success");
+        return [...prev, ch.name];
+      }
+    });
   };
 
   const handleChannelSelect = (ch: typeof channels[0]) => {
@@ -11895,6 +12086,38 @@ const [headingBar, setHeadingBar] = useState(() => {
           liquidGlass={liquidGlass}
         />
       )}
+
+      {/* Floating Notification Toasts in the top right corner */}
+      <div className="fixed top-24 right-6 z-[9999] flex flex-col gap-3 w-80 max-w-[calc(100vw-3rem)] pointer-events-none">
+        <AnimatePresence>
+          {toasts.map((toast) => (
+            <motion.div
+              key={toast.id}
+              initial={{ opacity: 0, y: -20, x: 20, scale: 0.95 }}
+              animate={{ opacity: 1, y: 0, x: 0, scale: 1 }}
+              exit={{ opacity: 0, x: 100, scale: 0.9, transition: { duration: 0.15 } }}
+              layout
+              className="pointer-events-auto p-4 rounded-xl border flex items-center gap-3 shadow-2xl backdrop-blur-md bg-slate-900/90 border-white/10 text-white"
+            >
+              <div className="shrink-0">
+                {toast.type === "success" && <CheckCircle2 className="w-5 h-5 text-emerald-400" />}
+                {toast.type === "error" && <AlertCircle className="w-5 h-5 text-red-400" />}
+                {toast.type === "warning" && <Info className="w-5 h-5 text-amber-400" />}
+                {toast.type === "info" && <Info className="w-5 h-5 text-sky-400" />}
+              </div>
+              <div className="flex-1 text-[11px] font-bold leading-relaxed tracking-wide">
+                {toast.message}
+              </div>
+              <button
+                onClick={() => setToasts(prev => prev.filter(t => t.id !== toast.id))}
+                className="shrink-0 p-1 hover:bg-white/5 rounded-lg transition-colors"
+              >
+                <X className="w-4 h-4 opacity-70 hover:opacity-100" />
+              </button>
+            </motion.div>
+          ))}
+        </AnimatePresence>
+      </div>
     </div>
   </MotionConfig>
 );
