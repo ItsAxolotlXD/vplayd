@@ -5,7 +5,7 @@
 
 import React, { useState, useEffect, useRef, useCallback, ChangeEvent, FormEvent, ReactNode, useMemo } from "react";
 import { 
-  Calendar, Play, Pause, Radio, Info, Sun, Moon, Maximize, Volume2, VolumeX, CheckCircle2, Shield, X, Lock, Terminal, Zap, Clock, History, MousePointer2, Sliders, ChevronLeft, ChevronRight, Layers, Filter, Sparkles, Camera, Palette, Layout, MessageSquare, Eye, EyeOff, ExternalLink, Monitor, Columns, Maximize2, Circle, AlertCircle, RotateCcw, Droplet, Trophy, Film, Music, Globe, Activity, ShieldCheck, LayoutGrid, ArrowRight, ArrowLeft, TrendingUp, Star, Crown, Menu, Pin, Send, Accessibility, Navigation, LayoutTemplate, LayoutPanelLeft, Square, Smartphone, Unlock, Thermometer, Check, Plus, AppWindow, Compass, Trash2, Newspaper, Shuffle, Link, StickyNote, Bold, Italic, Underline, Droplets, Wind, CloudSun, MapPin, CloudRain,
+  Calendar, Play, Pause, Radio, Info, Sun, Moon, Maximize, Volume2, VolumeX, CheckCircle2, Shield, X, Lock, Terminal, Zap, Clock, History, MousePointer2, Sliders, ChevronLeft, ChevronRight, Layers, Filter, Sparkles, Camera, Palette, Layout, MessageSquare, Eye, EyeOff, ExternalLink, Monitor, Columns, Maximize2, Circle, AlertCircle, RotateCcw, Droplet, Trophy, Film, Music, Globe, Activity, ShieldCheck, LayoutGrid, ArrowRight, ArrowLeft, TrendingUp, Star, Crown, Menu, Pin, Send, Accessibility, Navigation, LayoutTemplate, LayoutPanelLeft, Square, Smartphone, Unlock, Thermometer, Check, Plus, AppWindow, Compass, Trash2, Newspaper, Shuffle, Link, StickyNote, Bold, Italic, Underline, Droplets, Wind, CloudSun, MapPin, CloudRain, Upload, Edit, FileText, Trash,
   Home, Tv, Settings, LogIn, LogOut, Heart, Users, User, Mic, Search, Folder, FolderOpen, Pizza, Cloud, CreditCard, Gift, HelpCircle, FlaskConical as Flask, GlassWater, Grid, ArrowUp, ArrowDown, ArrowRightLeft, Bot, Hash
 } from "lucide-react";
 import Hls from "hls.js";
@@ -321,9 +321,9 @@ const SplashScreen = ({
       initial={{ opacity: 1 }}
       exit={{ opacity: 0 }}
       transition={{ duration: 0.8 }}
-      className="fixed inset-0 z-[110] flex flex-col items-center justify-center overflow-hidden bg-[#1c1c1e]"
+      className="fixed inset-0 z-[110] flex flex-col items-center justify-center overflow-hidden bg-black"
     >
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(74,196,254,0.03),transparent_70%)] pointer-events-none" />
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.02),transparent_70%)] pointer-events-none" />
       
       <motion.div
         initial={{ scale: 0.95, opacity: 0 }}
@@ -334,7 +334,24 @@ const SplashScreen = ({
         {isReinstalling ? (
           <div className="flex flex-col items-center gap-6 text-center">
             <div className="flex flex-col items-center gap-3">
-              <LoadingSpinner isDark={true} className="w-12 h-12 text-[#4AC4FE] opacity-90" />
+              <div className="w-18 h-18 sm:w-20 sm:h-20">
+                <svg 
+                  className="animate-spin w-full h-full" 
+                  viewBox="0 0 24 24" 
+                  fill="none" 
+                  xmlns="http://www.w3.org/2000/svg"
+                  style={{ animationDuration: '1.2s' }}
+                >
+                  <circle className="opacity-10" cx="12" cy="12" r="10" stroke="#FFFFFF" strokeWidth="3" />
+                  <path 
+                    fill="none" 
+                    stroke="#FFFFFF" 
+                    strokeWidth="3" 
+                    strokeLinecap="round" 
+                    d="M12 2C6.47715 2 2 6.47715 2 12C2 13.5997 2.37562 15.1116 3.0434 16.4527"
+                  />
+                </svg>
+              </div>
               <div className="flex flex-col items-center gap-2 mt-2">
                 <span className="text-white/50 text-xs md:text-sm tracking-wide select-none font-normal" style={{ fontFamily: "Montserrat, sans-serif" }}>
                   Vplay is erasing - This might take several minutes
@@ -348,9 +365,26 @@ const SplashScreen = ({
         ) : (
           <div className="flex flex-col items-center gap-6 text-center">
             <div className="flex flex-col items-center gap-3">
-              <LoadingSpinner isDark={true} className="w-12 h-12 text-[#4AC4FE] opacity-90" />
-              <span className="text-white/80 text-sm font-semibold tracking-wide mt-2 select-none flex items-center justify-center gap-1.5 animate-pulse">
-                Sản phẩm của <span className="bg-clip-text text-transparent bg-gradient-to-r from-yellow-400 to-amber-500 font-extrabold">VNRT</span>
+              <div className="w-18 h-18 sm:w-20 sm:h-20">
+                <svg 
+                  className="animate-spin w-full h-full" 
+                  viewBox="0 0 24 24" 
+                  fill="none" 
+                  xmlns="http://www.w3.org/2000/svg"
+                  style={{ animationDuration: '1.1s' }}
+                >
+                  <circle className="opacity-10" cx="12" cy="12" r="10" stroke="#FFFFFF" strokeWidth="3" />
+                  <path 
+                    fill="none" 
+                    stroke="#FFFFFF" 
+                    strokeWidth="3" 
+                    strokeLinecap="round" 
+                    d="M12 2C6.47715 2 2 6.47715 2 12C2 13.5997 2.37562 15.1116 3.0434 16.4527"
+                  />
+                </svg>
+              </div>
+              <span className="text-white text-base sm:text-lg md:text-xl font-bold tracking-wide mt-3 select-none flex items-center justify-center gap-1.5">
+                Sản phẩm của <span className="bg-clip-text text-transparent bg-gradient-to-r from-yellow-400 to-amber-500 font-black">VNRT</span>
               </span>
             </div>
           </div>
@@ -483,20 +517,20 @@ function ChannelLogo({ src, alt, className, isDark, liquidGlass, status }: { src
 
   if (isVTV5_TN || isVTV5_TNB) {
     return (
-      <div className="relative flex items-center justify-center w-full h-full select-none">
+      <div className="flex flex-col items-center justify-center w-full h-full select-none gap-2 pt-1">
         <img 
           src={finalSrc} 
           alt={alt} 
           referrerPolicy="no-referrer"
           onError={() => setError(true)}
-          className={`${className} object-contain p-0 transition-all duration-300 ${
+          className={`max-h-[65%] object-contain p-0 transition-all duration-300 ${
             liquidGlass === "tinted" 
               ? "opacity-100" 
               : !isDark ? "drop-shadow-[0_8px_16px_rgba(0,0,0,0.15)]" : ""
           } ${scaleClass} ${status === "maintenance" ? "grayscale opacity-20" : status === "coming-soon" ? "" : ""}`} 
         />
         <span 
-          className="absolute -bottom-3 sm:-bottom-3.5 left-1/2 transform -translate-x-1/2 text-[9px] sm:text-[10px] font-black text-white tracking-wider uppercase text-center whitespace-nowrap leading-none filter drop-shadow-[0_1.5px_2px_rgba(0,0,0,1)] drop-shadow-[0_1px_1px_rgba(0,0,0,0.8)]"
+          className="text-[8.5px] sm:text-[10px] font-extrabold text-[#FFDF00] tracking-wider uppercase text-center whitespace-nowrap leading-none filter drop-shadow-[0_1px_2px_rgba(0,0,0,0.9)]"
           style={{ fontFamily: "Montserrat, sans-serif" }}
         >
           {isVTV5_TN ? "TÂY NGUYÊN" : "TÂY NAM BỘ"}
@@ -520,7 +554,7 @@ function ChannelLogo({ src, alt, className, isDark, liquidGlass, status }: { src
   );
 }
 
-function ChannelCard({ ch, onClick, isDark, isActive, favorites, toggleFavorite, liquidGlass, className, isLiveTab }: {
+function ChannelCard({ ch, onClick, isDark, isActive, favorites, toggleFavorite, liquidGlass, className, isLiveTab, onContextMenu }: {
   ch: Channel,
   onClick: () => void,
   isDark: boolean,
@@ -530,7 +564,8 @@ function ChannelCard({ ch, onClick, isDark, isActive, favorites, toggleFavorite,
   liquidGlass: "glassy" | "tinted",
   className?: string,
   key?: string | number,
-  isLiveTab?: boolean
+  isLiveTab?: boolean,
+  onContextMenu?: (e: React.MouseEvent, ch: Channel) => void
 }) {
   const isMaintenance = ch.status === "maintenance";
   const isComingSoon = ch.status === "coming-soon";
@@ -544,7 +579,14 @@ function ChannelCard({ ch, onClick, isDark, isActive, favorites, toggleFavorite,
   };
 
   return (
-    <div className={`relative group ${className || ""}`}>
+    <div 
+      onContextMenu={(e) => {
+        if (onContextMenu) {
+          onContextMenu(e, ch);
+        }
+      }}
+      className={`relative group ${className || ""}`}
+    >
       {/* Background glow when active or hover */}
       <div className={`absolute -inset-1 rounded-2xl blur-lg opacity-0 group-hover:opacity-100 transition-none z-0 ${isActive ? "bg-[#4AC4FE]/10 opacity-100" : isDark ? "bg-white/2" : "bg-slate-500/5"}`} />
       
@@ -739,7 +781,8 @@ function HomeContent({
   direction, 
   paginate, 
   slides, 
-  bypassed 
+  bypassed,
+  onChannelContextMenu
 }: {
   setActiveTab: (tab: string) => void,
   setActiveChannel: (ch: typeof channels[0]) => void,
@@ -753,7 +796,8 @@ function HomeContent({
   direction: number,
   paginate: (newDirection: number) => void,
   slides: any[],
-  bypassed?: boolean
+  bypassed?: boolean,
+  onChannelContextMenu?: (e: React.MouseEvent, ch: Channel) => void
 }) {
   const [randomChannels, setRandomChannels] = useState<typeof channels>([]);
   
@@ -1145,6 +1189,7 @@ function HomeContent({
                       favorites={favorites} 
                       toggleFavorite={toggleFavorite} 
                       liquidGlass={liquidGlass}
+                      onContextMenu={onChannelContextMenu}
                     />
                     <div className={`mt-3 text-center text-xs font-bold truncate tracking-wide ${isDark ? "text-slate-350" : "text-slate-600"}`}>
                       {ch.name}
@@ -1178,6 +1223,7 @@ function HomeContent({
                     favorites={favorites} 
                     toggleFavorite={toggleFavorite} 
                     liquidGlass={liquidGlass}
+                    onContextMenu={onChannelContextMenu}
                   />
                   <div className={`mt-2 text-center text-[11px] font-black truncate tracking-wide ${isDark ? "text-slate-400" : "text-slate-700"}`}>
                     {ch.name}
@@ -1302,6 +1348,7 @@ function HomeContent({
                 favorites={favorites} 
                 toggleFavorite={toggleFavorite} 
                 liquidGlass={liquidGlass}
+                onContextMenu={onChannelContextMenu}
               />
             ))}
           </div>
@@ -1520,7 +1567,7 @@ function IndividualPlayer({ channel, isMuted, volume, isDark }: { channel: Chann
   );
 }
 
-function TVContent({ active, setActive, isDark, favorites, toggleFavorite, user, onLogin, isDev, liquidGlass, sortOrder, setSortOrder, showSplash, featureFlags, searchQuery, bypassed, setIsPlayerInView, loadingTreatment, currentTime }: { 
+function TVContent({ active, setActive, isDark, favorites, toggleFavorite, user, onLogin, isDev, liquidGlass, sortOrder, setSortOrder, showSplash, featureFlags, searchQuery, bypassed, setIsPlayerInView, loadingTreatment, currentTime, onChannelContextMenu, pinnedChannels, togglePinChannel }: { 
   active: Channel, 
   setActive: (ch: Channel) => void, 
   isDark: boolean,
@@ -1538,7 +1585,10 @@ function TVContent({ active, setActive, isDark, favorites, toggleFavorite, user,
   bypassed?: boolean,
   setIsPlayerInView: (val: boolean) => void,
   loadingTreatment: string,
-  currentTime: Date
+  currentTime: Date,
+  onChannelContextMenu: (e: React.MouseEvent, ch: Channel) => void,
+  pinnedChannels: Channel[],
+  togglePinChannel: (ch: Channel) => void
 }) {
   const videoRef = useRef<HTMLVideoElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -1549,6 +1599,87 @@ function TVContent({ active, setActive, isDark, favorites, toggleFavorite, user,
 
   const [isMobileScheduleOpen, setIsMobileScheduleOpen] = useState(false);
   const [selectedDayOffset, setSelectedDayOffset] = useState<number>(0);
+
+  const [liveSubTab, setLiveSubTab] = useState<"vplay" | "custom" | "url">("vplay");
+
+  const parseM3U = (text: string): Channel[] => {
+    const lines = text.split("\n");
+    const parsedChannels: Channel[] = [];
+    let currentGroup = "Kênh tự thêm";
+    
+    for (let i = 0; i < lines.length; i++) {
+      const line = lines[i].trim();
+      if (line.startsWith("#EXTINF:")) {
+        let name = "Kênh không tên";
+        let logo = "https://static.wikia.nocookie.net/ftv/images/e/ed/FTV_Channel.png/revision/latest?cb=20260424160410&path-prefix=vi";
+        let stream = "";
+        
+        const commaIndex = line.lastIndexOf(",");
+        if (commaIndex !== -1) {
+          name = line.substring(commaIndex + 1).trim();
+        }
+        
+        const logoMatch = line.match(/tvg-logo="([^"]+)"/) || line.match(/logo="([^"]+)"/);
+        if (logoMatch && logoMatch[1]) {
+          logo = logoMatch[1];
+        }
+        
+        const groupMatch = line.match(/group-title="([^"]+)"/);
+        if (groupMatch && groupMatch[1]) {
+          currentGroup = groupMatch[1];
+        }
+        
+        let nextLineIndex = i + 1;
+        while (nextLineIndex < lines.length && (lines[nextLineIndex].trim() === "" || lines[nextLineIndex].trim().startsWith("#"))) {
+          nextLineIndex++;
+        }
+        
+        if (nextLineIndex < lines.length) {
+          stream = lines[nextLineIndex].trim();
+          if (stream) {
+            parsedChannels.push({
+              name: name,
+              category: currentGroup || "Kênh tự thêm",
+              logo: logo,
+              stream: stream,
+              desc: `Luồng phát tự thêm từ M3U`
+            });
+          }
+        }
+      }
+    }
+    return parsedChannels;
+  };
+
+  const [customPlaylists, setCustomPlaylists] = useState<{ id: string; name: string; content: string; channels: Channel[] }[]>(() => {
+    const saved = localStorage.getItem("vplay_custom_playlists_v2");
+    if (saved) {
+      try {
+        return JSON.parse(saved);
+      } catch (e) {
+        console.error("Failed to parse playlists", e);
+      }
+    }
+    return Array.from({ length: 5 }).map((_, idx) => ({
+      id: `list-${idx + 1}`,
+      name: `Kênh của bạn ${idx + 1}`,
+      content: "",
+      channels: []
+    }));
+  });
+
+  const [activePlaylistIdx, setActivePlaylistIdx] = useState<number>(0);
+  const [customPage, setCustomPage] = useState<number>(0);
+  const [editingPlaylistIdx, setEditingPlaylistIdx] = useState<number | null>(null);
+  const [tempPlaylistName, setTempPlaylistName] = useState("");
+  const [tempPlaylistContent, setTempPlaylistContent] = useState("");
+
+  const [urlStreamInput, setUrlStreamInput] = useState("");
+  const [urlStreamName, setUrlStreamName] = useState("VLC Live Stream");
+  const [urlHistory, setUrlHistory] = useState<{ name: string; url: string; date: string }[]>(() => {
+    const saved = localStorage.getItem("vplay_url_stream_history");
+    return saved ? JSON.parse(saved) : [];
+  });
 
   // Generate 7 days mapping from Day -3 to Day +3
   const dayOptions = useMemo(() => {
@@ -1709,7 +1840,17 @@ function TVContent({ active, setActive, isDark, favorites, toggleFavorite, user,
   const timeString = (currentTime || new Date()).toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit', hour12: false });
   const isMaintenance = active.status === "maintenance";
 
-  const filteredChannels = channels
+  const displayChannelsList = useMemo(() => {
+    if (liveSubTab === "vplay") {
+      return channels;
+    } else if (liveSubTab === "custom") {
+      return customPlaylists[activePlaylistIdx]?.channels || [];
+    } else {
+      return [];
+    }
+  }, [liveSubTab, customPlaylists, activePlaylistIdx]);
+
+  const filteredChannels = displayChannelsList
     .filter(ch => {
       const matchesSearch = ch.name.toLowerCase().includes(searchQuery.toLowerCase());
       const matchesType = filterType === "Tất cả" 
@@ -1725,9 +1866,15 @@ function TVContent({ active, setActive, isDark, favorites, toggleFavorite, user,
     });
 
   const CATEGORY_ORDER = ["VTV", "HTV", "VTVcab", "Địa phương", "Thiết yếu", "Phát thanh"];
-  const filteredCategories = CATEGORY_ORDER.filter(cat => 
-    filteredChannels.some(ch => ch.category === cat)
-  );
+  const filteredCategories = useMemo(() => {
+    if (liveSubTab === "custom") {
+      const cats = Array.from(new Set(filteredChannels.map(c => c.category || "Kênh tự thêm")));
+      return cats.length > 0 ? cats : ["Kênh tự thêm"];
+    }
+    return CATEGORY_ORDER.filter(cat => 
+      filteredChannels.some(ch => ch.category === cat)
+    );
+  }, [filteredChannels, liveSubTab]);
 
   // Play 1000Hz testcard tone beep for testcard/maintenance channels
   useEffect(() => {
@@ -2685,209 +2832,602 @@ function TVContent({ active, setActive, isDark, favorites, toggleFavorite, user,
         </div>
       </div>
 
-      {/* FILTERS */}
-      <div className="mt-8 md:mt-12">
-        <div className="flex flex-col md:flex-row gap-6 mb-8 w-full">
-          {/* Desktop Filter Row */}
-          <div className={`hidden md:flex gap-6 overflow-x-auto pb-3 md:pb-3 no-scrollbar flex-1 border-b ${isDark ? "border-white/10" : "border-slate-200"}`}>
-            {["Tất cả", "VTV", "HTV", "VTVcab", "Thiết yếu", "Địa phương", "Phát thanh"].map((type) => (
+      {/* SOURCE TABS: Vplay, Custom Playlists, URL direct stream */}
+      <div className="mt-8 flex justify-center w-full px-2 max-w-4xl mx-auto">
+        <div className={`flex p-1 rounded-2xl border ${
+          isDark ? "bg-[#14151c]/90 border-white/5" : "bg-slate-100 border-slate-200"
+        }`}>
+          {[
+            { id: "vplay", label: "Hệ thống", icon: Tv },
+            { id: "custom", label: "Kênh của bạn", icon: FolderOpen },
+            { id: "url", label: "Link luồng / URL", icon: Link }
+          ].map((tab) => {
+            const Icon = tab.icon;
+            const isActive = liveSubTab === tab.id;
+            return (
               <button
-                key={type}
-                onClick={() => setFilterType(type)}
-                className={`relative pb-2.5 text-sm font-semibold whitespace-nowrap transition-all ${
-                  filterType === type
-                    ? "text-[#4AC4FE] font-black"
-                    : "text-slate-400 hover:text-white"
+                key={tab.id}
+                onClick={() => {
+                  setLiveSubTab(tab.id as any);
+                  setCustomPage(0);
+                }}
+                className={`relative flex items-center gap-2 px-5 py-2.5 rounded-xl text-xs font-bold transition-all ${
+                  isActive
+                    ? isDark ? "text-[#4AC4FE]" : "text-[#4AC4FE] font-black"
+                    : "text-slate-400 hover:text-slate-200"
                 }`}
               >
-                {type}
-                {filterType === type && (
+                {isActive && (
                   <motion.div
-                    layoutId="activeFilterTab"
-                    className="absolute bottom-0 left-0 right-0 h-[3px] bg-[#4AC4FE] rounded-full"
-                    transition={{ type: "spring", stiffness: 350, damping: 30 }}
+                    layoutId="liveSubTabIndicator"
+                    className={`absolute inset-0 rounded-xl z-0 ${
+                      isDark ? "bg-white/5 border border-white/10" : "bg-white shadow"
+                    }`}
                   />
                 )}
+                <Icon size={14} className="z-10" />
+                <span className="z-10">{tab.label}</span>
               </button>
-            ))}
-          </div>
+            );
+          })}
+        </div>
+      </div>
 
-          {/* Mobile Filter & Sort side-by-side dropdowns */}
-          <div className="flex md:hidden w-full gap-3 relative z-30">
-            {/* Mobile Filter Dropdown */}
-            <div className="relative flex-1">
-              <button
-                onClick={() => { setShowFilterMenu(!showFilterMenu); setShowSortMenu(false); }}
-                className={`w-full p-3.5 rounded-xl border transition-all flex items-center justify-between gap-2 bg-white/5 border-white/5 text-white ${liquidGlass ? "backdrop-blur-md" : ""}`}
-              >
-                <div className="flex items-center gap-2">
-                  <Filter className="h-4 w-4 text-[#4AC4FE]" />
-                  <span className="text-xs font-bold uppercase tracking-wider text-slate-300">Lọc</span>
+      {liveSubTab === "custom" && (
+        <div className="mt-6 flex flex-col gap-4 w-full px-2 md:max-w-4xl lg:max-w-6xl xl:max-w-[1280px] mx-auto">
+          <div className="flex flex-wrap items-center gap-2 justify-center">
+            {customPlaylists.map((pl, idx) => {
+              const isActive = activePlaylistIdx === idx;
+              return (
+                <div key={pl.id} className="flex items-center gap-1">
+                  <button
+                    onClick={() => {
+                      setActivePlaylistIdx(idx);
+                      setCustomPage(0);
+                    }}
+                    className={`flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs font-bold transition-all ${
+                      isActive
+                        ? "bg-[#4AC4FE]/10 text-[#4AC4FE] border border-[#4AC4FE]/20"
+                        : isDark ? "bg-white/5 hover:bg-white/10 text-slate-300 border border-transparent" : "bg-slate-200/50 hover:bg-slate-200 text-slate-705 border border-transparent"
+                    }`}
+                  >
+                    <FileText size={12} />
+                    <span>{pl.name || `Kênh ${idx + 1}`}</span>
+                    <span className="opacity-50 text-[10px] bg-slate-500/15 px-1.5 py-0.5 rounded-full">
+                      {pl.channels.length}
+                    </span>
+                  </button>
+                  <button
+                    onClick={() => {
+                      setEditingPlaylistIdx(idx);
+                      setTempPlaylistName(pl.name);
+                      setTempPlaylistContent(pl.content);
+                    }}
+                    title="Chỉnh sửa hoặc tải lên File M3U"
+                    className={`p-2 rounded-xl hover:bg-white/5 transition-all ${isActive ? "text-[#4AC4FE]" : "text-slate-400"}`}
+                  >
+                    <Edit size={14} />
+                  </button>
                 </div>
-                <span className="text-xs font-black truncate max-w-[80px] text-[#4AC4FE]">
-                  {filterType}
-                </span>
-              </button>
+              );
+            })}
+          </div>
+        </div>
+      )}
 
-              <AnimatePresence>
-                {showFilterMenu && (
-                  <>
-                    <div className="fixed inset-0 z-40" onClick={() => setShowFilterMenu(false)} />
-                    <motion.div
-                      initial={{ opacity: 0, y: 10, scale: 0.95 }}
-                      animate={{ opacity: 1, y: 0, scale: 1 }}
-                      exit={{ opacity: 0, y: 10, scale: 0.95 }}
-                      className={`absolute top-full left-0 right-0 mt-2 p-2 border shadow-2xl bg-slate-900 border-white/10 z-50 ${liquidGlass ? "rounded-2xl backdrop-blur-3xl" : "rounded-xl"}`}
-                    >
-                      {["Tất cả", "VTV", "HTV", "VTVcab", "Thiết yếu", "Địa phương", "Phát thanh"].map((type) => (
-                        <button
-                          key={type}
-                          onClick={() => {
-                            setFilterType(type);
-                            setShowFilterMenu(false);
-                          }}
-                          className={`w-full text-left px-4 py-2.5 rounded-xl text-xs font-bold transition-all ${
-                            filterType === type 
-                              ? "bg-[#4AC4FE] text-white" 
-                              : "text-white hover:bg-white/5"
-                          }`}
-                        >
-                          {type}
-                        </button>
-                      ))}
-                    </motion.div>
-                  </>
-                )}
-              </AnimatePresence>
+      {editingPlaylistIdx !== null && (
+        <div className="fixed inset-0 z-[500] flex items-center justify-center p-4">
+          <div className="absolute inset-0 bg-black/60 backdrop-blur-md z-10" onClick={() => setEditingPlaylistIdx(null)} />
+          <motion.div
+            initial={{ scale: 0.95, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            exit={{ scale: 0.95, opacity: 0 }}
+            className={`relative w-full max-w-2xl rounded-3xl border shadow-2xl p-6 z-20 overflow-hidden flex flex-col max-h-[85vh] ${
+              isDark ? "bg-[#181924] border-white/10 text-white" : "bg-white border-slate-200 text-slate-800"
+            }`}
+          >
+            <div className="flex items-center justify-between mb-4 border-b border-white/5 pb-3">
+              <h3 className="text-lg font-black tracking-tighter uppercase flex items-center gap-2 text-[#4AC4FE]">
+                <Edit size={18} />
+                Cài đặt & dán Code M3U/M3U8
+              </h3>
+              <button onClick={() => setEditingPlaylistIdx(null)} className="p-1.5 rounded-xl hover:bg-white/5 text-slate-400 hover:text-white">
+                <X size={18} />
+              </button>
             </div>
 
-            {/* Mobile Sort Dropdown */}
-            <div className="relative flex-1">
-              <button
-                onClick={() => { setShowSortMenu(!showSortMenu); setShowFilterMenu(false); }}
-                className={`w-full p-3.5 rounded-xl border transition-all flex items-center justify-between gap-2 bg-white/5 border-white/5 text-white ${liquidGlass ? "backdrop-blur-md" : ""}`}
-              >
-                <div className="flex items-center gap-2">
-                  <Sliders className="h-4 w-4 text-[#4AC4FE]" />
-                  <span className="text-xs font-bold uppercase tracking-wider text-slate-300">Xếp</span>
+            <div className="space-y-4 overflow-y-auto pr-1 flex-1">
+              <div>
+                <label className="text-xs font-black uppercase tracking-wider opacity-60 mb-1.5 block">Tên trang kênh của bạn</label>
+                <input
+                  type="text"
+                  value={tempPlaylistName}
+                  onChange={(e) => setTempPlaylistName(e.target.value)}
+                  className={`w-full px-3 py-2.5 rounded-xl text-xs font-bold border ${isDark ? "bg-white/5 border-white/10 text-white" : "bg-slate-100 border-slate-200 text-slate-850"}`}
+                  placeholder="Kênh của bạn"
+                />
+              </div>
+
+              <div>
+                <label className="text-xs font-black uppercase tracking-wider opacity-60 mb-1.5 block flex items-center justify-between">
+                  <span>Mã danh sách (M3U / M3U8 text)</span>
+                  <span className="text-[10px] text-[#4AC4FE] font-bold">Dán code m3u8</span>
+                </label>
+                <textarea
+                  value={tempPlaylistContent}
+                  onChange={(e) => setTempPlaylistContent(e.target.value)}
+                  className={`w-full h-48 px-3 py-2.5 rounded-xl text-xs font-mono border whitespace-pre resize-none overflow-y-auto ${isDark ? "bg-white/5 border-white/10 text-white" : "bg-slate-100 border-slate-200 text-slate-850"}`}
+                  placeholder={`#EXTM3U\n#EXTINF:-1 tvg-logo="http://logo.url" group-title="Thể thao",Kênh Thể Thao HD\nhttp://stream-link.m3u8`}
+                />
+              </div>
+
+              {/* Upload file zone */}
+              <div>
+                <label className="text-xs font-black uppercase tracking-wider opacity-60 mb-1.5 block">Hoặc tải tập tin M3U/M3U8 từ thiết bị</label>
+                <div
+                  onClick={() => {
+                    const el = document.getElementById("m3u-file-picker");
+                    if (el) el.click();
+                  }}
+                  className={`border-2 border-dashed rounded-2xl p-6 text-center cursor-pointer transition-all hover:bg-white/5 flex flex-col items-center justify-center gap-2 ${
+                    isDark ? "border-white/10 bg-white/5 text-slate-300" : "border-slate-300 bg-slate-50 text-slate-700"
+                  }`}
+                >
+                  <Upload size={24} className="text-[#4AC4FE]" />
+                  <p className="text-xs font-bold">Nhấn để <span className="text-[#4AC4FE]">chọn file .m3u / .m3u8</span> hoặc kéo thả vào đây</p>
+                  <input
+                    id="m3u-file-picker"
+                    type="file"
+                    accept=".m3u,.m3u8,text/plain"
+                    className="hidden"
+                    onChange={(e) => {
+                      const file = e.target.files?.[0];
+                      if (file) {
+                        const r = new FileReader();
+                        r.onload = (loaded) => {
+                          const res = loaded.target?.result;
+                          if (res && typeof res === "string") {
+                            setTempPlaylistContent(res);
+                            showToast(`Đã tải xong file: ${file.name}`, "success");
+                          }
+                        };
+                        r.readAsText(file);
+                      }
+                    }}
+                  />
                 </div>
-                <span className="text-xs font-black truncate max-w-[80px] text-[#4AC4FE]">
+              </div>
+            </div>
+
+            <div className="grid grid-cols-2 gap-3 mt-5 pt-3 border-t border-white/5">
+              <button
+                onClick={() => setEditingPlaylistIdx(null)}
+                className={`py-3 rounded-xl font-bold text-xs ${isDark ? "bg-white/5 hover:bg-white/10" : "bg-slate-100 hover:bg-slate-250 text-slate-700"}`}
+              >
+                Hủy bỏ
+              </button>
+              <button
+                onClick={() => {
+                  const plIdx = editingPlaylistIdx;
+                  setCustomPlaylists(prev => {
+                    const next = [...prev];
+                    const parsed = parseM3U(tempPlaylistContent);
+                    next[plIdx] = {
+                      ...next[plIdx],
+                      name: tempPlaylistName || `Kênh ${plIdx + 1}`,
+                      content: tempPlaylistContent,
+                      channels: parsed
+                    };
+                    localStorage.setItem("vplay_custom_playlists_v2", JSON.stringify(next));
+                    showToast(`Đã lưu "${tempPlaylistName || `Kênh ${plIdx + 1}`}" thành công!`, "success");
+                    return next;
+                  });
+                  setEditingPlaylistIdx(null);
+                  setCustomPage(0);
+                }}
+                className="py-3 rounded-xl font-bold text-xs bg-[#4AC4FE] text-white hover:bg-[#3bb0f0] transition-all"
+              >
+                Lưu lại
+              </button>
+            </div>
+          </motion.div>
+        </div>
+      )}
+
+      {liveSubTab === "url" && (
+        <div className="mt-8 px-2 md:max-w-4xl mx-auto w-full">
+          <div className={`p-6 rounded-3xl border shadow-xl space-y-4 ${
+            isDark ? "bg-[#181924]/80 border-white/5" : "bg-white/80 border-slate-200"
+          }`}>
+            <h3 className="text-md font-black tracking-widest uppercase text-[#4AC4FE] flex items-center gap-2">
+              <Link size={16} />
+              Dán URL luồng live stream trực tiếp
+            </h3>
+            <p className="text-xs opacity-60">Dán trực tiếp link luồng phát live M3U8, MP4, MP3... của riêng bạn để xem tức thì (giống như trên VLC Player).</p>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label className="text-[10px] font-black uppercase tracking-widest mb-1.5 block opacity-50">Tên luồng phát</label>
+                <input
+                  type="text"
+                  value={urlStreamName}
+                  onChange={(e) => setUrlStreamName(e.target.value)}
+                  className={`w-full px-4 py-3 rounded-2xl text-xs font-bold border ${isDark ? "bg-white/5 border-white/10 text-white" : "bg-slate-100 border-slate-230 text-slate-850"}`}
+                  placeholder="Ví dụ: Kênh phim HBO, luồng test..."
+                />
+              </div>
+
+              <div>
+                <label className="text-[10px] font-black uppercase tracking-widest mb-1.5 block opacity-50">Link luồng phát (URL)</label>
+                <input
+                  type="text"
+                  value={urlStreamInput}
+                  onChange={(e) => setUrlStreamInput(e.target.value)}
+                  className={`w-full px-4 py-3 rounded-2xl text-xs font-mono border ${isDark ? "bg-white/5 border-white/10 text-white" : "bg-slate-100 border-slate-230 text-slate-850"}`}
+                  placeholder="https://example.com/live/playlist.m3u8"
+                />
+              </div>
+            </div>
+
+            <button
+              onClick={() => {
+                if (!urlStreamInput.trim()) {
+                  showToast("Vui lòng nhập Link luồng phát!", "error");
+                  return;
+                }
+                const customChan: Channel = {
+                  name: urlStreamName || "VLC Live Stream",
+                  category: "Luồng trực tiếp",
+                  logo: "https://static.wikia.nocookie.net/ftv/images/a/a9/Ic_vlc_icon.png/revision/latest?cb=20260424160410",
+                  stream: urlStreamInput.trim(),
+                  desc: `Luồng phát trực tiếp từ URL`
+                };
+                setActive(customChan);
+                
+                // Save to history
+                const dateString = new Date().toLocaleString("vi-VN");
+                setUrlHistory(prev => {
+                  const filtered = prev.filter(p => p.url !== urlStreamInput.trim());
+                  const next = [{ name: urlStreamName, url: urlStreamInput.trim(), date: dateString }, ...filtered].slice(0, 5);
+                  localStorage.setItem("vplay_url_stream_history", JSON.stringify(next));
+                  return next;
+                });
+                
+                showToast(`Đang kết nối luồng "${urlStreamName || "VLC Stream"}"`, "success");
+              }}
+              className="w-full py-3.5 rounded-2xl font-bold text-xs bg-[#4AC4FE] hover:bg-[#3bb0f0] text-white flex items-center justify-center gap-2 shadow-lg shadow-[#4AC4FE]/25 active:scale-95 transition-all"
+            >
+              <Play size={14} fill="currentColor" />
+              Bắt đầu xem luồng trực tiếp
+            </button>
+
+            {urlHistory.length > 0 && (
+              <div className="pt-4 border-t border-white/5">
+                <div className="flex items-center justify-between mb-2">
+                  <span className="text-[10px] font-black uppercase tracking-widest opacity-55">Lịch sử xem gần đây ({urlHistory.length})</span>
+                  <button
+                    onClick={() => {
+                      setUrlHistory([]);
+                      localStorage.removeItem("vplay_url_stream_history");
+                      showToast("Đã xóa sạch lịch sử xem URL", "info");
+                    }}
+                    className="text-[9px] font-bold text-red-500 hover:underline uppercase"
+                  >
+                    Xóa lịch sử
+                  </button>
+                </div>
+                <div className="space-y-2">
+                  {urlHistory.map((h, hIdx) => (
+                    <div
+                      key={`url-hist-${hIdx}`}
+                      className={`flex items-center justify-between p-2.5 rounded-xl text-xs font-bold border cursor-pointer transition-all text-left ${
+                        isDark ? "bg-white/5 border-white/5 hover:bg-white/10" : "bg-slate-100 hover:bg-slate-200 border-transparent text-slate-800"
+                      }`}
+                      onClick={() => {
+                        setUrlStreamName(h.name);
+                        setUrlStreamInput(h.url);
+                        const customChan: Channel = {
+                          name: h.name,
+                          category: "Luồng trực tiếp",
+                          logo: "https://static.wikia.nocookie.net/ftv/images/a/a9/Ic_vlc_icon.png/revision/latest?cb=20260424160410",
+                          stream: h.url,
+                          desc: h.url
+                        };
+                        setActive(customChan);
+                        showToast(`Luồng: ${h.name}`, "info");
+                      }}
+                    >
+                      <div className="flex items-center gap-3 min-w-0 flex-1">
+                        <Clock size={12} className="opacity-50 shrink-0" />
+                        <div className="truncate">
+                          <p className={`font-semibold ${isDark ? "text-slate-250" : "text-slate-800"}`}>{h.name}</p>
+                          <p className="text-[10px] opacity-40 font-mono truncate">{h.url}</p>
+                        </div>
+                      </div>
+                      <span className="text-[8px] opacity-30 shrink-0 ml-3">{h.date}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
+
+      {/* FILTERS */}
+      <div className="mt-8 md:mt-12">
+        {liveSubTab === "vplay" && (
+          <div className="flex flex-col md:flex-row gap-6 mb-8 w-full">
+            {/* Desktop Filter Row */}
+            <div className={`hidden md:flex gap-6 overflow-x-auto pb-3 md:pb-3 no-scrollbar flex-1 border-b ${isDark ? "border-white/10" : "border-slate-200"}`}>
+              {["Tất cả", "VTV", "HTV", "VTVcab", "Thiết yếu", "Địa phương", "Phát thanh"].map((type) => (
+                <button
+                  key={type}
+                  onClick={() => setFilterType(type)}
+                  className={`relative pb-2.5 text-sm font-semibold whitespace-nowrap transition-all ${
+                    filterType === type
+                      ? "text-[#4AC4FE] font-black"
+                      : "text-slate-400 hover:text-white"
+                  }`}
+                >
+                  {type}
+                  {filterType === type && (
+                    <motion.div
+                      layoutId="activeFilterTab"
+                      className="absolute bottom-0 left-0 right-0 h-[3px] bg-[#4AC4FE] rounded-full"
+                      transition={{ type: "spring", stiffness: 350, damping: 30 }}
+                    />
+                  )}
+                </button>
+              ))}
+            </div>
+
+            {/* Mobile Filter & Sort side-by-side dropdowns */}
+            <div className="flex md:hidden w-full gap-3 relative z-30">
+              {/* Mobile Filter Dropdown */}
+              <div className="relative flex-1">
+                <button
+                  onClick={() => { setShowFilterMenu(!showFilterMenu); setShowSortMenu(false); }}
+                  className={`w-full p-3.5 rounded-xl border transition-all flex items-center justify-between gap-2 bg-white/5 border-white/5 text-white ${liquidGlass ? "backdrop-blur-md" : ""}`}
+                >
+                  <div className="flex items-center gap-2">
+                    <Filter className="h-4 w-4 text-[#4AC4FE]" />
+                    <span className="text-xs font-bold uppercase tracking-wider text-slate-300">Lọc</span>
+                  </div>
+                  <span className="text-xs font-black truncate max-w-[80px] text-[#4AC4FE]">
+                    {filterType}
+                  </span>
+                </button>
+
+                <AnimatePresence>
+                  {showFilterMenu && (
+                    <>
+                      <div className="fixed inset-0 z-40" onClick={() => setShowFilterMenu(false)} />
+                      <motion.div
+                        initial={{ opacity: 0, y: 10, scale: 0.95 }}
+                        animate={{ opacity: 1, y: 0, scale: 1 }}
+                        exit={{ opacity: 0, y: 10, scale: 0.95 }}
+                        className={`absolute top-full left-0 right-0 mt-2 p-2 border shadow-2xl bg-slate-900 border-white/10 z-50 ${liquidGlass ? "rounded-2xl backdrop-blur-3xl" : "rounded-xl"}`}
+                      >
+                        {["Tất cả", "VTV", "HTV", "VTVcab", "Thiết yếu", "Địa phương", "Phát thanh"].map((type) => (
+                          <button
+                            key={type}
+                            onClick={() => {
+                              setFilterType(type);
+                              setShowFilterMenu(false);
+                            }}
+                            className={`w-full text-left px-4 py-2.5 rounded-xl text-xs font-bold transition-all ${
+                              filterType === type 
+                                ? "bg-[#4AC4FE] text-white" 
+                                : "text-white hover:bg-white/5"
+                            }`}
+                          >
+                            {type}
+                          </button>
+                        ))}
+                      </motion.div>
+                    </>
+                  )}
+                </AnimatePresence>
+              </div>
+
+              {/* Mobile Sort Dropdown */}
+              <div className="relative flex-1">
+                <button
+                  onClick={() => { setShowSortMenu(!showSortMenu); setShowFilterMenu(false); }}
+                  className={`w-full p-3.5 rounded-xl border transition-all flex items-center justify-between gap-2 bg-white/5 border-white/5 text-white ${liquidGlass ? "backdrop-blur-md" : ""}`}
+                >
+                  <div className="flex items-center gap-2">
+                    <Sliders className="h-4 w-4 text-[#4AC4FE]" />
+                    <span className="text-xs font-bold uppercase tracking-wider text-slate-300">Xếp</span>
+                  </div>
+                  <span className="text-xs font-black truncate max-w-[80px] text-[#4AC4FE]">
+                    {sortOrder === "default" ? "Mặc định" : sortOrder === "az" ? "A-Z" : "Z-A"}
+                  </span>
+                </button>
+
+                <AnimatePresence>
+                  {showSortMenu && (
+                    <>
+                      <div className="fixed inset-0 z-40" onClick={() => setShowSortMenu(false)} />
+                      <motion.div
+                        initial={{ opacity: 0, y: 10, scale: 0.95 }}
+                        animate={{ opacity: 1, y: 0, scale: 1 }}
+                        exit={{ opacity: 0, y: 10, scale: 0.95 }}
+                        className={`absolute top-full left-0 right-0 mt-2 p-2 border shadow-2xl bg-slate-900 border-white/10 z-50 ${liquidGlass ? "rounded-2xl backdrop-blur-3xl" : "rounded-xl"}`}
+                      >
+                        {[
+                          { id: "default", label: "Mặc định" },
+                          { id: "az", label: "Sắp xếp A-Z" },
+                          { id: "za", label: "Sắp xếp Z-A" }
+                        ].map((opt) => (
+                          <button
+                            key={opt.id}
+                            onClick={() => {
+                              setSortOrder(opt.id as any);
+                              setShowSortMenu(false);
+                            }}
+                            className={`w-full text-left px-4 py-2.5 rounded-xl text-xs font-bold transition-all ${
+                              sortOrder === opt.id 
+                                ? "bg-[#4AC4FE] text-white" 
+                                : "text-white hover:bg-white/5"
+                            }`}
+                          >
+                            {opt.label}
+                          </button>
+                        ))}
+                      </motion.div>
+                    </>
+                  )}
+                </AnimatePresence>
+              </div>
+            </div>
+
+            <div className="hidden md:flex gap-2">
+              {/* Desktop Sort Button */}
+              <button
+                onClick={() => {
+                  if (sortOrder === "default") setSortOrder("az");
+                  else if (sortOrder === "az") setSortOrder("za");
+                  else setSortOrder("default");
+                }}
+                className={`p-3.5 md:p-3 rounded-xl border transition-all items-center gap-2 ${
+                  isDark 
+                    ? "bg-slate-800/50 border-slate-700/50 text-white" 
+                    : "bg-white/50 border-white/60 text-slate-900"
+                } ${liquidGlass ? "backdrop-blur-md" : ""}`}
+                title={sortOrder === "default" ? "Mặc định" : sortOrder === "az" ? "Sắp xếp A-Z" : "Sắp xếp Z-A"}
+              >
+                <Filter className="h-5 w-5" />
+                <span className="text-sm font-medium">
                   {sortOrder === "default" ? "Mặc định" : sortOrder === "az" ? "A-Z" : "Z-A"}
                 </span>
               </button>
-
-              <AnimatePresence>
-                {showSortMenu && (
-                  <>
-                    <div className="fixed inset-0 z-40" onClick={() => setShowSortMenu(false)} />
-                    <motion.div
-                      initial={{ opacity: 0, y: 10, scale: 0.95 }}
-                      animate={{ opacity: 1, y: 0, scale: 1 }}
-                      exit={{ opacity: 0, y: 10, scale: 0.95 }}
-                      className={`absolute top-full left-0 right-0 mt-2 p-2 border shadow-2xl bg-slate-900 border-white/10 z-50 ${liquidGlass ? "rounded-2xl backdrop-blur-3xl" : "rounded-xl"}`}
-                    >
-                      {[
-                        { id: "default", label: "Mặc định" },
-                        { id: "az", label: "Sắp xếp A-Z" },
-                        { id: "za", label: "Sắp xếp Z-A" }
-                      ].map((opt) => (
-                        <button
-                          key={opt.id}
-                          onClick={() => {
-                            setSortOrder(opt.id as any);
-                            setShowSortMenu(false);
-                          }}
-                          className={`w-full text-left px-4 py-2.5 rounded-xl text-xs font-bold transition-all ${
-                            sortOrder === opt.id 
-                              ? "bg-[#4AC4FE] text-white" 
-                              : "text-white hover:bg-white/5"
-                          }`}
-                        >
-                          {opt.label}
-                        </button>
-                      ))}
-                    </motion.div>
-                  </>
-                )}
-              </AnimatePresence>
             </div>
           </div>
-
-          <div className="hidden md:flex gap-2">
-            {/* Desktop Sort Button */}
-            <button
-              onClick={() => {
-                if (sortOrder === "default") setSortOrder("az");
-                else if (sortOrder === "az") setSortOrder("za");
-                else setSortOrder("default");
-              }}
-              className={`p-3.5 md:p-3 rounded-xl border transition-all items-center gap-2 ${
-                isDark 
-                  ? "bg-slate-800/50 border-slate-700/50 text-white" 
-                  : "bg-white/50 border-white/60 text-slate-900"
-              } ${liquidGlass ? "backdrop-blur-md" : ""}`}
-              title={sortOrder === "default" ? "Mặc định" : sortOrder === "az" ? "Sắp xếp A-Z" : "Sắp xếp Z-A"}
-            >
-              <Filter className="h-5 w-5" />
-              <span className="text-sm font-medium">
-                {sortOrder === "default" ? "Mặc định" : sortOrder === "az" ? "A-Z" : "Z-A"}
-              </span>
-            </button>
-          </div>
-        </div>
+        )}
 
         {/* CHANNEL LIST */}
         <div className="space-y-12 md:space-y-16">
-                {filteredCategories.map((cat, catIdx) => (
-            <div key={`${cat}-${catIdx}`} className="space-y-6 md:space-y-8">
-              <div className="flex items-center gap-3 md:gap-4 px-2">
-                <div className="h-6 md:h-8 w-[4px] bg-[#4AC4FE] rounded-full" />
-                <div>
-                  <h3 className={`text-xl md:text-3xl font-bold tracking-tighter uppercase ${isDark ? "text-white" : "text-slate-900"}`}>{cat}</h3>
-                </div>
+          {liveSubTab === "custom" && customPlaylists[activePlaylistIdx]?.channels.length === 0 ? (
+            <div className={`p-12 rounded-[40px] border-2 border-dashed flex flex-col items-center justify-center gap-4 transition-all max-w-xl mx-auto py-16 ${
+              isDark ? "border-white/10 bg-[#12131c]" : "border-slate-300 bg-slate-50 text-slate-800"
+            }`}>
+              <div className="p-4 rounded-3xl bg-[#4AC4FE]/10 text-[#4AC4FE]">
+                <FileText size={32} />
               </div>
-              <div className="grid grid-cols-3 sm:grid-cols-[repeat(auto-fill,minmax(140px,1fr))] gap-3 md:gap-6">
-                {cat === "Phát thanh" ? (
-                  <div className={`col-span-full p-12 rounded-[40px] border-2 border-dashed flex flex-col items-center justify-center gap-4 transition-all ${
-                    isDark ? "border-white/10 bg-white/5 text-slate-400 hover:bg-white/10" : "border-black/5 bg-black/5 text-slate-500 hover:bg-black/[0.02]"
-                  }`}>
-                    <div className="p-4 rounded-3xl bg-[#4AC4FE]/10 text-[#4AC4FE]">
-                      <Sparkles size={32} className="animate-pulse" strokeWidth={1.5} />
+              <div className="text-center">
+                <p className="font-extrabold text-lg tracking-tight uppercase mb-1">Cá nhân hóa tivi của riêng bạn</p>
+                <p className="text-xs font-semibold opacity-60 max-w-sm mx-auto">Vui lòng tải tệp .m3u, .m3u8 hoặc dán code của riêng bạn để xem trực tiếp các kênh yêu thích của bạn ngay trên vplay.</p>
+              </div>
+              <button
+                onClick={() => {
+                  setEditingPlaylistIdx(activePlaylistIdx);
+                  setTempPlaylistName(customPlaylists[activePlaylistIdx].name);
+                  setTempPlaylistContent("");
+                }}
+                className="px-6 py-3 rounded-full font-bold text-xs bg-[#4AC4FE] hover:bg-[#3bb0f0] text-white transition-all shadow-lg shadow-[#4AC4FE]/20"
+              >
+                Tải lên / Nhập File M3U tại đây
+              </button>
+            </div>
+          ) : liveSubTab === "vplay" || liveSubTab === "custom" ? (
+            <>
+              {filteredCategories.map((cat, catIdx) => {
+                const playlistChannels = filteredChannels.filter(c => liveSubTab === "vplay" || c.category === cat);
+                const displaySubset = liveSubTab === "custom"
+                  ? playlistChannels.slice(customPage * 24, (customPage + 1) * 24)
+                  : playlistChannels;
+
+                if (displaySubset.length === 0 && liveSubTab === "custom") return null;
+
+                return (
+                  <div key={`${cat}-${catIdx}`} className="space-y-6 md:space-y-8">
+                    <div className="flex items-center justify-between px-2">
+                      <div className="flex items-center gap-3 md:gap-4">
+                        <div className="h-6 md:h-8 w-[4px] bg-[#4AC4FE] rounded-full" />
+                        <div>
+                          <h3 className={`text-xl md:text-3xl font-bold tracking-tighter uppercase ${isDark ? "text-white" : "text-slate-900"}`}>{cat}</h3>
+                        </div>
+                      </div>
+                      
+                      <span className={`text-[10px] font-black px-3 py-1 rounded-full ${isDark ? "bg-white/5 text-slate-400" : "bg-slate-100 text-slate-500"}`}>
+                        {playlistChannels.length} Kênh
+                      </span>
                     </div>
-                    <div className="text-center">
-                      <p className="font-bold text-xl tracking-tighter uppercase mb-1">Coming Soon!</p>
-                      <p className="text-xs font-medium opacity-60">Tính năng đang được phát triển để mang lại trải nghiệm âm thanh tốt nhất.</p>
+
+                    <div className="grid grid-cols-3 sm:grid-cols-[repeat(auto-fill,minmax(140px,1fr))] gap-3 md:gap-6">
+                      {cat === "Phát thanh" ? (
+                        <div className={`col-span-full p-12 rounded-[40px] border-2 border-dashed flex flex-col items-center justify-center gap-4 transition-all ${
+                          isDark ? "border-white/10 bg-white/5 text-slate-400 hover:bg-white/10" : "border-black/5 bg-black/5 text-slate-500 hover:bg-black/[0.02]"
+                        }`}>
+                          <div className="p-4 rounded-3xl bg-[#4AC4FE]/10 text-[#4AC4FE]">
+                            <Sparkles size={32} className="animate-pulse" strokeWidth={1.5} />
+                          </div>
+                          <div className="text-center">
+                            <p className="font-bold text-xl tracking-tighter uppercase mb-1">Coming Soon!</p>
+                            <p className="text-xs font-medium opacity-60">Tính năng đang được phát triển để mang lại trải nghiệm âm thanh tốt nhất.</p>
+                          </div>
+                        </div>
+                      ) : (
+                        displaySubset.map((ch) => (
+                          <ChannelCard 
+                            key={`tv-${cat}-${ch.name}-${ch.stream}`} 
+                            ch={ch} 
+                            onClick={() => setActive(ch)} 
+                            isDark={isDark} 
+                            isActive={active.name === ch.name} 
+                            favorites={favorites} 
+                            toggleFavorite={toggleFavorite} 
+                            liquidGlass={liquidGlass}
+                            isLiveTab={true}
+                            onContextMenu={onChannelContextMenu}
+                          />
+                        ))
+                      )}
                     </div>
                   </div>
-                ) : (
-                  filteredChannels.filter(c => c.category === cat).map((ch) => (
-                    <ChannelCard 
-                      key={`tv-${cat}-${ch.name}`} 
-                      ch={ch} 
-                      onClick={() => setActive(ch)} 
-                      isDark={isDark} 
-                      isActive={active.name === ch.name} 
-                      favorites={favorites} 
-                      toggleFavorite={toggleFavorite} 
-                      liquidGlass={liquidGlass}
-                      isLiveTab={true}
-                    />
-                  ))
-                )}
-              </div>
-            </div>
-          ))}
-          {filteredChannels.length === 0 && (
-            <div className="text-center py-20 flex flex-col items-center justify-center space-y-6">
-              <div className="w-16 h-16 relative flex items-center justify-center">
-                 <LoadingSpinner isDark={isDark} className="w-14 h-14" />
-              </div>
-              <div>
-                <h3 className={`text-xl font-bold ${isDark ? "text-slate-400" : "text-slate-600"}`}>Đang tìm kiếm...</h3>
-                <p className="text-slate-500 text-sm font-bold uppercase tracking-widest mt-2">Đang nỗ lực tải kết quả mới nhất</p>
-              </div>
-            </div>
-          )}
+                );
+              })}
+
+              {/* Custom M3u Paging indicators */}
+              {liveSubTab === "custom" && filteredChannels.length > 24 && (
+                <div className={`flex flex-col sm:flex-row items-center justify-between gap-4 p-5 rounded-3xl border mt-8 ${
+                  isDark ? "bg-white/5 border-white/5" : "bg-slate-50 border-slate-200"
+                }`}>
+                  <span className="text-xs font-bold opacity-60">
+                    Hiển thị {customPage * 24 + 1} - {Math.min((customPage + 1) * 24, filteredChannels.length)} trong tổng số {filteredChannels.length} kênh
+                  </span>
+                  
+                  <div className="flex items-center gap-2">
+                    <button
+                      onClick={() => {
+                        setCustomPage(p => Math.max(0, p - 1));
+                        window.scrollTo({ top: 400, behavior: "smooth" });
+                      }}
+                      disabled={customPage === 0}
+                      className="px-4 py-2.5 text-xs font-black uppercase tracking-widest rounded-xl bg-[#4AC4FE]/10 text-[#4AC4FE] disabled:opacity-30 enabled:hover:bg-[#4AC4FE]/20"
+                    >
+                      Trang trước
+                    </button>
+                    <span className="text-xs font-black min-w-[80px] text-center">
+                      Trang {customPage + 1} / {Math.ceil(filteredChannels.length / 24)}
+                    </span>
+                    <button
+                      onClick={() => {
+                        setCustomPage(p => Math.min(Math.ceil(filteredChannels.length / 24) - 1, p + 1));
+                        window.scrollTo({ top: 400, behavior: "smooth" });
+                      }}
+                      disabled={(customPage + 1) * 24 >= filteredChannels.length}
+                      className="px-4 py-2.5 text-xs font-black uppercase tracking-widest rounded-xl bg-[#4AC4FE]/10 text-[#4AC4FE] disabled:opacity-30 enabled:hover:bg-[#4AC4FE]/20"
+                    >
+                      Trang sau
+                    </button>
+                  </div>
+                </div>
+              )}
+            </>
+          ) : null}
         </div>
       </div>
 
@@ -6340,8 +6880,8 @@ function ProtectedContent({ children, user, onLogin, isDark, isDev, liquidGlass,
             liquidGlass ? "rounded-2xl" : "rounded-lg"
           } ${
             isDark 
-              ? "bg-[#4AC4FE] hover:bg-[#4AC4FE] text-white shadow-[0_0_20px_rgba(147,51,234,0.4)]" 
-              : "bg-[#4AC4FE] hover:bg-[#4AC4FE] text-white shadow-[0_0_20px_rgba(168,85,247,0.3)]"
+              ? "bg-[#4AC4FE] hover:bg-[#4AC4FE] text-black shadow-[0_0_20px_rgba(147,51,234,0.4)]" 
+              : "bg-[#4AC4FE] hover:bg-[#4AC4FE] text-black shadow-[0_0_20px_rgba(168,85,247,0.3)]"
           }`}
         >
           Đăng nhập
@@ -6495,7 +7035,7 @@ function OnboardingWizard({
                         <button
                           key={mode.id.toString()}
                           onClick={() => setConfig({ ...config, useSidebar: mode.id })}
-                          className={`flex items-center gap-5 p-6 rounded-3xl border-2 transition-all ${config.useSidebar === mode.id ? "bg-[#4AC4FE] border-[#4AC4FE] text-white shadow-[0_10px_25px_rgba(147,51,234,0.3)]" : `${config.isDark ? "bg-white/5 border-transparent hover:bg-white/10" : "bg-slate-100 hover:bg-slate-200 border-transparent text-slate-900"}`}`}
+                          className={`flex items-center gap-5 p-6 rounded-3xl border-2 transition-all ${config.useSidebar === mode.id ? "bg-[#4AC4FE] border-[#4AC4FE] text-black shadow-[0_10px_25px_rgba(147,51,234,0.3)]" : `${config.isDark ? "bg-white/5 border-transparent hover:bg-white/10" : "bg-slate-100 hover:bg-slate-200 border-transparent text-slate-900"}`}`}
                         >
                           <div className={`p-3.5 rounded-2xl ${config.useSidebar === mode.id ? "bg-white text-[#4AC4FE]" : "bg-white/10 text-slate-500"}`}><mode.icon size={24} /></div>
                           <div className="text-left">
@@ -6516,7 +7056,7 @@ function OnboardingWizard({
                   </div>
                   <div className="flex gap-4">
                     {step < steps.length - 1 ? (
-                      <button onClick={nextStep} className="px-8 py-2.5 bg-[#4AC4FE] hover:bg-[#4AC4FE] text-white rounded-2xl font-bold text-sm shadow-lg shadow-none transition-all active:scale-95">Tiếp theo</button>
+                      <button onClick={nextStep} className="px-8 py-2.5 bg-[#4AC4FE] hover:bg-[#4AC4FE] text-black rounded-2xl font-bold text-sm shadow-lg shadow-none transition-all active:scale-95">Tiếp theo</button>
                     ) : (
                       <button onClick={() => onComplete(config)} className="px-10 py-3 bg-gradient-to-r from-indigo-600 to-[#4AC4FE] hover:from-indigo-500 hover:to-purple-500 text-white rounded-[24px] font-bold text-sm shadow-xl shadow-none transition-all active:scale-95 hover:shadow-2xl">Bắt đầu ngay</button>
                     )}
@@ -10392,6 +10932,39 @@ const [headingBar, setHeadingBar] = useState(() => {
     });
   };
 
+  const [pinnedChannels, setPinnedChannels] = useState<Channel[]>(() => {
+    const saved = localStorage.getItem("vplay_pinned_channels");
+    return saved ? JSON.parse(saved) : [];
+  });
+
+  const [channelContextMenu, setChannelContextMenu] = useState<{ x: number, y: number, ch: Channel } | null>(null);
+
+  const togglePinChannel = (ch: Channel) => {
+    setPinnedChannels(prev => {
+      const exists = prev.some(p => p.name === ch.name);
+      let next;
+      if (exists) {
+        next = prev.filter(p => p.name !== ch.name);
+        showToast(`Đã bỏ ghim kênh ${ch.name}`, "info");
+      } else {
+        next = [...prev, ch];
+        showToast(`Đã ghim kênh ${ch.name}`, "success");
+      }
+      localStorage.setItem("vplay_pinned_channels", JSON.stringify(next));
+      return next;
+    });
+  };
+
+  const onChannelContextMenu = (e: React.MouseEvent, ch: Channel) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setChannelContextMenu({
+      x: e.clientX,
+      y: e.clientY,
+      ch: ch
+    });
+  };
+
   const handleChannelSelect = (ch: typeof channels[0]) => {
     if (!user && !isDev && !bypassed) {
       setShowAuthModal(true);
@@ -10866,6 +11439,59 @@ const [headingBar, setHeadingBar] = useState(() => {
             handleOpenSettings={handleOpenSettings}
           />
         )}
+        {channelContextMenu && (
+          <>
+            <div 
+              className="fixed inset-0 z-[300]" 
+              onClick={() => setChannelContextMenu(null)}
+              onContextMenu={(e) => { e.preventDefault(); setChannelContextMenu(null); }}
+            />
+            <motion.div 
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.95 }}
+              transition={{ duration: 0.12 }}
+              style={{ top: channelContextMenu.y, left: channelContextMenu.x }}
+              className={`fixed z-[310] min-w-[240px] rounded-2xl border p-2.5 shadow-2xl backdrop-blur-xl ${
+                isDark 
+                  ? "bg-[#181924]/95 border-white/10 text-white shadow-black/80" 
+                  : "bg-white/95 border-slate-200 text-slate-800"
+              }`}
+            >
+              <div className="px-3 pb-2 pt-1 border-b border-white/5 mb-1.5 text-[10px] font-black uppercase tracking-wider opacity-50 truncate max-w-[220px]">
+                Kênh: {channelContextMenu.ch.name}
+              </div>
+              
+              {/* Toggle Favorite Option */}
+              <button
+                onClick={() => {
+                  toggleFavorite(channelContextMenu.ch);
+                  setChannelContextMenu(null);
+                }}
+                className={`w-full text-left truncate flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-bold transition-all ${
+                  isDark ? "hover:bg-white/5 text-slate-200 hover:text-white" : "hover:bg-slate-100 text-slate-700 hover:text-slate-900"
+                }`}
+              >
+                <Heart size={14} className={favorites.includes(channelContextMenu.ch.name) ? "text-red-500 fill-red-500 animate-pulse" : "opacity-60"} />
+                {favorites.includes(channelContextMenu.ch.name) ? "Loại bỏ khỏi yêu thích" : "Thêm vào yêu thích"}
+              </button>
+
+              {/* Toggle Pin/Unpin Option */}
+              <button
+                onClick={() => {
+                  togglePinChannel(channelContextMenu.ch);
+                  setChannelContextMenu(null);
+                }}
+                className={`w-full text-left truncate flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-bold transition-all ${
+                  isDark ? "hover:bg-white/5 text-slate-200 hover:text-white" : "hover:bg-slate-100 text-slate-700 hover:text-slate-900"
+                }`}
+              >
+                <Pin size={14} className={pinnedChannels.some(p => p.name === channelContextMenu.ch.name) ? "text-[#4AC4FE] fill-[#4AC4FE]" : "opacity-60"} />
+                {pinnedChannels.some(p => p.name === channelContextMenu.ch.name) ? "Bỏ ghim khỏi sidebar/nav" : "Ghim vào sidebar/nav"}
+              </button>
+            </motion.div>
+          </>
+        )}
         {isMobileContextMenuOpen && (
           <div className="fixed inset-0 z-[999] flex items-end justify-center md:hidden">
             {/* Backdrop */}
@@ -11023,7 +11649,7 @@ const [headingBar, setHeadingBar] = useState(() => {
           {!isDev ? (
             <button 
               onClick={() => { setShowDevSettings(false); setShowDevPrompt(true); }}
-              className="w-full py-4 bg-[#4AC4FE]/90 hover:bg-[#4AC4FE] text-white rounded-[32px] font-bold transition-all shadow-[0_8px_24px_rgba(147,51,234,0.3)] backdrop-blur-md active:scale-95"
+              className="w-full py-4 bg-[#4AC4FE]/90 hover:bg-[#4AC4FE] text-black rounded-[32px] font-bold transition-all shadow-[0_8px_24px_rgba(147,51,234,0.3)] backdrop-blur-md active:scale-95"
             >
               Kích hoạt (Yêu cầu mật khẩu)
             </button>
@@ -11256,6 +11882,7 @@ const [headingBar, setHeadingBar] = useState(() => {
                   paginate={paginate}
                   slides={slides}
                   bypassed={bypassed}
+                  onChannelContextMenu={onChannelContextMenu}
                 />
               )}
               {displayTab === "Tìm kiếm" && (
@@ -11312,6 +11939,9 @@ const [headingBar, setHeadingBar] = useState(() => {
                   setIsPlayerInView={setIsPlayerInView}
                   loadingTreatment={loadingTreatment}
                   currentTime={currentTime}
+                  onChannelContextMenu={onChannelContextMenu}
+                  pinnedChannels={pinnedChannels}
+                  togglePinChannel={togglePinChannel}
                 />
               )}
               {displayTab === "Experiments" && (
@@ -11966,10 +12596,14 @@ const [headingBar, setHeadingBar] = useState(() => {
         <motion.div 
           initial={{ y: 100, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
-          className="flex items-center gap-1 md:gap-3 pointer-events-auto w-full max-w-lg px-4"
+          className="flex flex-col items-center gap-1.5 pointer-events-auto w-full max-w-lg px-4"
         >
           <motion.nav 
-            className={`flex-1 flex items-center justify-between p-2 transition-all duration-500 overflow-hidden relative ${
+            key={`bottom-nav-bounce-${navPage}-${activeTab}-${activeChannel?.name || ''}`}
+            initial={{ scale: 0.96 }}
+            animate={{ scale: 1 }}
+            transition={{ type: "spring", stiffness: 450, damping: 13 }}
+            className={`flex-1 w-full flex items-center justify-between p-2 transition-all duration-500 overflow-hidden relative ${
               liquidGlass === "tinted"
                 ? `rounded-full border shadow-[0_20px_40px_rgba(0,0,0,0.15)] backdrop-blur-[100px] bg-white/80 border-white/80`
                 : liquidGlass === "glassy"
@@ -11979,7 +12613,11 @@ const [headingBar, setHeadingBar] = useState(() => {
             
             {/* Prev Arrow */}
             <button 
-              onClick={() => setNavPage((prev) => (prev - 1 + 3) % 3)}
+              onClick={() => {
+                const addPages = Math.ceil(pinnedChannels.length / 4);
+                const totPages = 3 + addPages;
+                setNavPage((prev) => (prev - 1 + totPages) % totPages);
+              }}
               className={`p-2 rounded-full hover:bg-black/5 transition-colors z-20 ${isDark ? "text-white/40" : "text-black/40"}`}
             >
               <ChevronLeft size={24} />
@@ -12191,35 +12829,65 @@ const [headingBar, setHeadingBar] = useState(() => {
                       )}
                     </motion.div>
                   )}
+
+                  {navPage >= 3 && (
+                    <div className="flex w-full items-center justify-around h-full px-2">
+                      {pinnedChannels.slice((navPage - 3) * 4, (navPage - 3) * 4 + 4).map((channel, cIdx) => (
+                        <button
+                          key={`nav-pinned-channel-${channel.name}-${cIdx}`}
+                          onClick={() => {
+                            setActiveChannel(channel);
+                            setActiveTab("Live");
+                          }}
+                          className="flex flex-col items-center justify-center p-1 w-14 group transition-all duration-300"
+                        >
+                          <div className={`w-8 h-8 rounded-full flex items-center justify-center p-1 border overflow-hidden bg-white/10 border-white/20 hover:scale-110 active:scale-95 transition-all`}>
+                            <img src={channel.logo} alt={channel.name} className="w-full h-full object-contain" referrerPolicy="no-referrer" />
+                          </div>
+                          <span className="text-[8px] font-bold text-center truncate w-full mt-1 opacity-80 group-hover:opacity-100">
+                            {channel.name}
+                          </span>
+                        </button>
+                      ))}
+                      {pinnedChannels.slice((navPage - 3) * 4, (navPage - 3) * 4 + 4).length === 0 && (
+                        <span className="text-[10px] opacity-40 font-bold uppercase tracking-widest">Không có kênh ghim</span>
+                      )}
+                    </div>
+                  )}
                 </motion.div>
               </AnimatePresence>
             </div>
 
-            {/* Dots indicator */}
-            <div className="absolute bottom-1.5 left-1/2 -translate-x-1/2 flex gap-1 z-30 pointer-events-none">
-              {[0, 1, 2].map((p) => {
-                const isActive = navPage === p;
-                return (
-                  <div
-                    key={`nav-dot-${p}`}
-                    className={`w-1 h-1 rounded-full transition-all duration-300 ${
-                      isActive 
-                        ? "bg-[#4AC4FE] w-3" 
-                        : isDark ? "bg-white/20" : "bg-black/20"
-                    }`}
-                  />
-                );
-              })}
-            </div>
-
             {/* Next Arrow */}
             <button 
-              onClick={() => setNavPage((prev) => (prev + 1) % 3)}
+              onClick={() => {
+                const addPages = Math.ceil(pinnedChannels.length / 4);
+                const totPages = 3 + addPages;
+                setNavPage((prev) => (prev + 1) % totPages);
+              }}
               className={`p-2 rounded-full hover:bg-black/5 transition-colors z-20 ${isDark ? "text-white/40" : "text-black/40"}`}
             >
               <ChevronRight size={24} />
             </button>
           </motion.nav>
+
+          {/* Dots page indicators displayed outside the navigation bar */}
+          <div className="flex gap-1.5 select-none py-1.5 pointer-events-none">
+            {Array.from({ length: 3 + Math.ceil(pinnedChannels.length / 4) }).map((_, p) => {
+              const isActive = navPage === p;
+              return (
+                <div
+                  key={`nav-dot-outside-${p}`}
+                  className={`w-1.5 h-1.5 rounded-full transition-all duration-300 ${
+                    isActive 
+                      ? "bg-[#4AC4FE] w-3.5" 
+                      : isDark ? "bg-white/20" : "bg-black/20"
+                  }`}
+                />
+              );
+            })}
+          </div>
+
           <FloatingTooltip text={hoveredTab || ""} show={!!hoveredTab} targetRect={hoveredTabRect} />
         </motion.div>
       </div>
