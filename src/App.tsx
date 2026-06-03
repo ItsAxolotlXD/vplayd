@@ -76,6 +76,23 @@ const WidgetsIcon = ({ className, size, strokeWidth }: { className?: string, siz
 const MicIcon = ({ className, size, strokeWidth }: { className?: string, size?: number | string, strokeWidth?: number }) => <Mic className={className} size={size || 20} strokeWidth={strokeWidth || 1.5} />;
 const SearchIcon = ({ className, size, strokeWidth }: { className?: string, size?: number | string, strokeWidth?: number }) => <Search className={className} size={size || 22} strokeWidth={strokeWidth || 1.5} />;
 const FolderIcon = ({ className, size, strokeWidth }: { className?: string, size?: number | string, strokeWidth?: number }) => <FolderOpen className={className} size={size || 22} strokeWidth={strokeWidth || 1.5} />;
+const WavesIcon = ({ className, size, strokeWidth }: { className?: string, size?: number | string, strokeWidth?: number }) => (
+  <svg 
+    width={size || 22} 
+    height={size || 22} 
+    viewBox="0 0 24 24" 
+    fill="none" 
+    stroke="currentColor" 
+    strokeWidth={strokeWidth || 1.5} 
+    strokeLinecap="round" 
+    strokeLinejoin="round" 
+    className={className}
+  >
+    <path d="M2 6c.6.5 1.2 1 2.5 1s1.9-.5 2.5-1c.6-.5 1.2-1 2.5-1s1.9.5 2.5 1c.6.5 1.2 1 2.5 1s1.9-.5 2.5-1c.6-.5 1.2-1 2.5-1s1.9.5 2.5 1" />
+    <path d="M2 12c.6.5 1.2 1 2.5 1s1.9-.5 2.5-1c.6-.5 1.2-1 2.5-1s1.9.5 2.5 1c.6.5 1.2 1 2.5 1s1.9-.5 2.5-1c.6-.5 1.2-1 2.5-1s1.9.5 2.5 1" />
+    <path d="M2 18c.6.5 1.2 1 2.5 1s1.9-.5 2.5-1c.6-.5 1.2-1 2.5-1s1.9.5 2.5 1c.6.5 1.2 1 2.5 1s1.9-.5 2.5-1c.6-.5 1.2-1 2.5-1s1.9.5 2.5 1" />
+  </svg>
+);
 
 
 // Test connection as per critical directive
@@ -323,7 +340,6 @@ const SplashScreen = ({
       transition={{ duration: 0.8 }}
       className="fixed inset-0 z-[110] flex flex-col items-center justify-center overflow-hidden bg-black"
     >
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.02),transparent_70%)] pointer-events-none" />
       
       <motion.div
         initial={{ scale: 0.95, opacity: 0 }}
@@ -342,7 +358,6 @@ const SplashScreen = ({
                   xmlns="http://www.w3.org/2000/svg"
                   style={{ animationDuration: '1.2s' }}
                 >
-                  <circle className="opacity-10" cx="12" cy="12" r="10" stroke="#FFFFFF" strokeWidth="3" />
                   <path 
                     fill="none" 
                     stroke="#FFFFFF" 
@@ -373,7 +388,6 @@ const SplashScreen = ({
                   xmlns="http://www.w3.org/2000/svg"
                   style={{ animationDuration: '1.1s' }}
                 >
-                  <circle className="opacity-10" cx="12" cy="12" r="10" stroke="#FFFFFF" strokeWidth="3" />
                   <path 
                     fill="none" 
                     stroke="#FFFFFF" 
@@ -415,7 +429,7 @@ const baseTabs = [
   { name: "Trang chủ", icon: HomeIcon, id: "Trang chủ" },
   { name: "Tìm kiếm", icon: SearchIcon, id: "Tìm kiếm" },
   { name: "Live", icon: TvIcon, id: "Live" },
-  { name: "Realm", icon: FolderIcon, id: "Realm" },
+  { name: "Realm", icon: WavesIcon, id: "Realm" },
   { name: "Cài đặt", icon: SettingsIcon, id: "Cài đặt" },
   { name: "Quản trị", icon: AdminIcon, id: "Quản trị" },
 ];
@@ -1615,7 +1629,9 @@ function IndividualPlayer({ channel, isMuted, volume, isDark }: { channel: Chann
   );
 }
 
-function TVContent({ active, setActive, isDark, favorites, toggleFavorite, user, onLogin, isDev, liquidGlass, sortOrder, setSortOrder, showSplash, featureFlags, searchQuery, bypassed, setIsPlayerInView, loadingTreatment, currentTime, onChannelContextMenu, pinnedChannels, togglePinChannel }: { 
+function TVContent({ key, mode = "live", active, setActive, isDark, favorites, toggleFavorite, user, onLogin, isDev, liquidGlass, sortOrder, setSortOrder, showSplash, featureFlags, searchQuery, bypassed, setIsPlayerInView, loadingTreatment, currentTime, onChannelContextMenu, pinnedChannels, togglePinChannel }: { 
+  key?: string,
+  mode?: "live" | "realm",
   active: Channel, 
   setActive: (ch: Channel) => void, 
   isDark: boolean,
@@ -1648,7 +1664,7 @@ function TVContent({ active, setActive, isDark, favorites, toggleFavorite, user,
   const [isMobileScheduleOpen, setIsMobileScheduleOpen] = useState(false);
   const [selectedDayOffset, setSelectedDayOffset] = useState<number>(0);
 
-  const [liveSubTab, setLiveSubTab] = useState<"vplay" | "custom" | "url">("vplay");
+  const [liveSubTab, setLiveSubTab] = useState<"vplay" | "custom" | "url">(mode === "realm" ? "custom" : "vplay");
 
   const parseM3U = (text: string): Channel[] => {
     const lines = text.split("\n");
@@ -2889,7 +2905,7 @@ function TVContent({ active, setActive, isDark, favorites, toggleFavorite, user,
             { id: "vplay", label: "Hệ thống", icon: Tv },
             { id: "custom", label: "Kênh của bạn", icon: FolderOpen },
             { id: "url", label: "Link luồng / URL", icon: Link }
-          ].map((tab) => {
+          ].filter(tab => mode !== "realm" || tab.id !== "vplay").map((tab) => {
             const Icon = tab.icon;
             const isActive = liveSubTab === tab.id;
             return (
@@ -10814,7 +10830,7 @@ const [headingBar, setHeadingBar] = useState(() => {
       }
     }
     return [];
-  }, [searchQuery, displayTab]);
+  }, [searchQuery, activeTab]);
   const [isSearchFocused, setIsSearchFocused] = useState(false);
   const [isSearchLoading, setIsSearchLoading] = useState(false);
   const [searchResults, setSearchResults] = useState<any[]>([]);
@@ -12777,7 +12793,7 @@ const [headingBar, setHeadingBar] = useState(() => {
                 >
                   {navPage === 0 && (
                     <>
-                      {baseTabs.filter(t => ["Trang chủ", "Live", "Cài đặt"].includes(t.id || t.name)).map((tab) => {
+                      {baseTabs.filter(t => ["Trang chủ", "Live", "Realm", "Cài đặt"].includes(t.id || t.name)).map((tab) => {
                         const Icon = tab.icon;
                         const tabId = tab.id || tab.name;
                         const isActive = activeTab === tabId;
