@@ -1,7 +1,10 @@
 {
   "name": "Absolute vplay dev",
-  "description": "A live TV streaming application with channel switching, program guides, AI assistant, and responsive design.",
+  "description": "A live TV streaming application with custom M3U/M3U8 playlist imports, URL stream pipelines in My Realm, search filtering, and official VTV classic logo reflections.",
   "requestFramePermissions": [
     "geolocation"
+  ],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
   ]
 }

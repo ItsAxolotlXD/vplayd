@@ -415,6 +415,7 @@ const baseTabs = [
   { name: "Trang chủ", icon: HomeIcon, id: "Trang chủ" },
   { name: "Tìm kiếm", icon: SearchIcon, id: "Tìm kiếm" },
   { name: "Live", icon: TvIcon, id: "Live" },
+  { name: "Realm", icon: FolderIcon, id: "Realm" },
   { name: "Cài đặt", icon: SettingsIcon, id: "Cài đặt" },
   { name: "Quản trị", icon: AdminIcon, id: "Quản trị" },
 ];
@@ -517,7 +518,7 @@ function ChannelLogo({ src, alt, className, isDark, liquidGlass, status }: { src
 
   if (isVTV5_TN || isVTV5_TNB) {
     return (
-      <div className="flex flex-col items-center justify-center w-full h-full select-none gap-2 pt-1">
+      <div className="relative w-full h-full flex flex-col items-center justify-center select-none gap-2 pt-1">
         <img 
           src={finalSrc} 
           alt={alt} 
@@ -535,22 +536,55 @@ function ChannelLogo({ src, alt, className, isDark, liquidGlass, status }: { src
         >
           {isVTV5_TN ? "TÂY NGUYÊN" : "TÂY NAM BỘ"}
         </span>
+
+        {/* Reflection */}
+        <div 
+          className="absolute top-[80%] left-0 right-0 h-10 pointer-events-none select-none opacity-20 flex items-start justify-center overflow-hidden z-0"
+          style={{
+            maskImage: "linear-gradient(to bottom, rgba(0,0,0,0.4) 0%, rgba(0,0,0,0) 60%)",
+            WebkitMaskImage: "linear-gradient(to bottom, rgba(0,0,0,0.4) 0%, rgba(0,0,0,0) 60%)",
+          }}
+        >
+          <img 
+            src={finalSrc} 
+            alt="" 
+            referrerPolicy="no-referrer"
+            className={`max-h-[65%] object-contain p-0 scale-y-[-1] blur-[3px] opacity-75 ${scaleClass} ${status === "maintenance" ? "grayscale" : ""}`} 
+          />
+        </div>
       </div>
     );
   }
 
   return (
-    <img 
-      src={finalSrc} 
-      alt={alt} 
-      referrerPolicy="no-referrer"
-      onError={() => setError(true)}
-      className={`${className} object-contain p-0 transition-all duration-300 ${
-        liquidGlass === "tinted" 
-          ? "opacity-100" 
-          : !isDark ? "drop-shadow-[0_8px_16px_rgba(0,0,0,0.15)]" : ""
-      } ${scaleClass} ${status === "maintenance" ? "grayscale opacity-20" : status === "coming-soon" ? "" : ""}`} 
-    />
+    <div className="relative w-full h-full flex items-center justify-center">
+      <img 
+        src={finalSrc} 
+        alt={alt} 
+        referrerPolicy="no-referrer"
+        onError={() => setError(true)}
+        className={`${className} object-contain p-0 transition-all duration-300 ${
+          liquidGlass === "tinted" 
+            ? "opacity-100" 
+            : !isDark ? "drop-shadow-[0_8px_16px_rgba(0,0,0,0.15)]" : ""
+        } ${scaleClass} ${status === "maintenance" ? "grayscale opacity-20" : status === "coming-soon" ? "" : ""}`} 
+      />
+      {/* Reflection under the channel logos */}
+      <div 
+        className="absolute top-[85%] left-0 right-0 h-1/2 pointer-events-none select-none opacity-30 flex items-start justify-center overflow-hidden z-0"
+        style={{
+          maskImage: "linear-gradient(to bottom, rgba(0,0,0,0.5) 0%, rgba(0,0,0,0) 65%)",
+          WebkitMaskImage: "linear-gradient(to bottom, rgba(0,0,0,0.5) 0%, rgba(0,0,0,0) 65%)",
+        }}
+      >
+        <img 
+          src={finalSrc} 
+          alt="" 
+          referrerPolicy="no-referrer"
+          className={`${className} object-contain p-0 scale-y-[-1] blur-[4px] opacity-80 ${scaleClass} ${status === "maintenance" ? "grayscale" : ""}`} 
+        />
+      </div>
+    </div>
   );
 }
 
@@ -960,13 +994,15 @@ function HomeContent({
             {/* Main card */}
             <div 
               onClick={() => {
-                if (slides[slideIndex]?.channel) {
+                if (slides[slideIndex]?.action) {
+                  slides[slideIndex].action();
+                } else if (slides[slideIndex]?.channel) {
                   setActiveChannel(slides[slideIndex].channel);
                   setActiveTab("Live");
                 }
               }}
               className={`w-full h-full rounded-[32px] overflow-hidden shadow-[0_24px_60px_rgba(0,0,0,0.65)] border border-white/10 relative transform scale-100 transition-all duration-500 ${
-                slides[slideIndex]?.channel ? "cursor-pointer group/card border-white/20 hover:border-[#4AC4FE]/40" : ""
+                (slides[slideIndex]?.channel || slides[slideIndex]?.action) ? "cursor-pointer group/card border-white/20 hover:border-[#4AC4FE]/40" : ""
               }`}
             >
               <AnimatePresence initial={false} custom={direction}>
@@ -1389,7 +1425,10 @@ function ExploreContent({
   setFeatureFlags,
   setIsSidebarLocked,
   handleSearchContextMenu,
-  searchFilter
+  searchFilter,
+  allCustomChannels,
+  searchFilterOption,
+  setSearchFilterOption
 }: {
   isDark: boolean,
   searchQuery: string,
@@ -1420,7 +1459,10 @@ function ExploreContent({
   setFeatureFlags: (val: any) => void,
   setIsSidebarLocked: (val: boolean) => void,
   handleSearchContextMenu: (e: React.MouseEvent) => void,
-  searchFilter: "all" | "channels" | "settings" | "experiments"
+  searchFilter: "all" | "channels" | "settings" | "experiments",
+  allCustomChannels?: Channel[],
+  searchFilterOption?: "Tất cả kênh" | "Kênh của Vplay" | "Kênh của bạn",
+  setSearchFilterOption?: (val: "Tất cả kênh" | "Kênh của Vplay" | "Kênh của bạn") => void
 }) {
   return (
     <div className="flex-1 flex flex-col pt-8 overflow-y-auto scrollbar-hide pb-32">
@@ -1442,6 +1484,8 @@ function ExploreContent({
               onClose={() => setSearchQuery("")} 
               liquidGlass={liquidGlass}
               onContextMenu={handleSearchContextMenu}
+              searchFilterOption={searchFilterOption}
+              setSearchFilterOption={setSearchFilterOption}
             />
           </div>
         </div>
@@ -1455,6 +1499,8 @@ function ExploreContent({
               onClose={() => setSearchQuery("")} 
               liquidGlass={liquidGlass}
               onContextMenu={handleSearchContextMenu}
+              searchFilterOption={searchFilterOption}
+              setSearchFilterOption={setSearchFilterOption}
             />
           </div>
           <div className="w-full border-t border-slate-800/40 pt-6">
@@ -1488,6 +1534,8 @@ function ExploreContent({
               setSearchQuery={setSearchQuery}
               searchFilter={searchFilter}
               onContextMenu={handleSearchContextMenu}
+              allCustomChannels={allCustomChannels}
+              searchFilterOption={searchFilterOption}
             />
           </div>
         </div>
@@ -3606,7 +3654,9 @@ function SearchPopup({
   setIsSidebarLocked,
   setSearchQuery,
   searchFilter,
-  onContextMenu
+  onContextMenu,
+  allCustomChannels,
+  searchFilterOption
 }: { 
   isDark: boolean, 
   searchQuery: string, 
@@ -3636,14 +3686,22 @@ function SearchPopup({
   setSearchQuery?: (val: string) => void,
   searchFilter?: "all" | "channels" | "settings" | "experiments",
   handleOpenSettings: () => void,
-  onContextMenu?: (e: React.MouseEvent) => void
+  onContextMenu?: (e: React.MouseEvent) => void,
+  allCustomChannels?: typeof channels,
+  searchFilterOption?: "Tất cả kênh" | "Kênh của Vplay" | "Kênh của bạn"
 }) {
   if (searchQuery.trim() === "" && !asContent) return null;
 
+  const sourceChannels = searchFilterOption === "Kênh của Vplay"
+    ? channels
+    : searchFilterOption === "Kênh của bạn"
+    ? (allCustomChannels || [])
+    : [...channels, ...(allCustomChannels || [])];
+
   const filteredChannels = searchFilter === "all" || searchFilter === "channels" 
-    ? channels.filter(ch => 
+    ? sourceChannels.filter(ch => 
         ch.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        ch.category.toLowerCase().includes(searchQuery.toLowerCase())
+        (ch.category && ch.category.toLowerCase().includes(searchQuery.toLowerCase()))
       )
     : [];
 
@@ -6790,7 +6848,16 @@ function WhatsNewPopup({ isDark, onClose, liquidGlass }: { isDark: boolean, onCl
   );
 }
 
-function SearchBar({ isDark, query, setQuery, onClose, liquidGlass, onContextMenu }: { isDark: boolean, query: string, setQuery: (q: string) => void, onClose: () => void, liquidGlass: "glassy" | "tinted", onContextMenu?: (e: React.MouseEvent) => void }) {
+function SearchBar({ isDark, query, setQuery, onClose, liquidGlass, onContextMenu, searchFilterOption, setSearchFilterOption }: { 
+  isDark: boolean, 
+  query: string, 
+  setQuery: (q: string) => void, 
+  onClose: () => void, 
+  liquidGlass: "glassy" | "tinted", 
+  onContextMenu?: (e: React.MouseEvent) => void,
+  searchFilterOption?: "Tất cả kênh" | "Kênh của Vplay" | "Kênh của bạn",
+  setSearchFilterOption?: (val: "Tất cả kênh" | "Kênh của Vplay" | "Kênh của bạn") => void 
+}) {
   const inputRef = useRef<HTMLInputElement>(null);
   const [isListening, setIsListening] = useState(false);
 
@@ -6844,7 +6911,7 @@ function SearchBar({ isDark, query, setQuery, onClose, liquidGlass, onContextMen
         />
       </div>
       <div className={`absolute bottom-0 left-1/2 -translate-x-1/2 h-[2px] w-[90%] transition-all duration-300 ${isGlassy ? "bg-white/20" : "bg-black/5"} group-focus-within:bg-[#4AC4FE]/60 group-focus-within:shadow-[0_0_10px_rgba(168,85,247,0.3)]`} />
-      <div className="flex items-center gap-2 shrink-0 mr-4">
+      <div className="flex items-center gap-2 shrink-0">
         <button 
           onClick={startVoiceSearch}
           className={`p-1.5 rounded-full transition-all ${isListening ? "bg-red-500 text-white animate-pulse" : `${iconColor} opacity-40 hover:opacity-100`}`}
@@ -6852,6 +6919,17 @@ function SearchBar({ isDark, query, setQuery, onClose, liquidGlass, onContextMen
         >
           <MicIcon size={20} className="md:w-5 md:h-5" />
         </button>
+        {setSearchFilterOption && searchFilterOption && (
+          <select
+            value={searchFilterOption}
+            onChange={(e) => setSearchFilterOption(e.target.value as any)}
+            className={`bg-transparent text-xs ${textColor} font-bold border-none outline-none cursor-pointer max-w-[124px] pr-2 shrink-0`}
+          >
+            <option value="Tất cả kênh" className={isDark ? "bg-[#181924] text-white" : "bg-white text-black"}>Tất cả kênh</option>
+            <option value="Kênh của Vplay" className={isDark ? "bg-[#181924] text-white" : "bg-white text-black"}>Kênh của Vplay</option>
+            <option value="Kênh của bạn" className={isDark ? "bg-[#181924] text-white" : "bg-white text-black"}>Kênh của bạn</option>
+          </select>
+        )}
       </div>
     </div>
   );
@@ -10350,6 +10428,13 @@ const [sidebarWidth, setSidebarWidth] = useState(() => {
 
   const slides = useMemo(() => [
     { 
+      url: "https://images.unsplash.com/photo-1593789198777-f29bc259780e?q=80&w=1200&auto=format&fit=crop", 
+      title: "Ra mắt tính năng My Realm", 
+      desc: "Nơi bạn có thể xem các kênh truyền hình bằng file m3u/m3u8 hoặc bằng luồng URL cực thuận tiện. Trải nghiệm ngay My Realm!",
+      tag: "Feature Link",
+      action: () => setActiveTab("Realm")
+    },
+    { 
       url: "https://img.cand.com.vn/resize/800x800/NewFiles/Images/2023/03/30/Giai_tri_vtv-1680172145227.jpg", 
       title: "Giải trí không giới hạn", 
       desc: "Khám phá thế giới truyền hình đặc sắc cùng hơn 200+ kênh giải trí đỉnh cao hoàn toàn miễn phí.",
@@ -10714,6 +10799,22 @@ const [headingBar, setHeadingBar] = useState(() => {
   ]);
 
   const [searchQuery, setSearchQuery] = useState("");
+  const [searchFilterOption, setSearchFilterOption] = useState<"Tất cả kênh" | "Kênh của Vplay" | "Kênh của bạn">("Tất cả kênh");
+
+  const allCustomChannels = useMemo(() => {
+    const saved = localStorage.getItem("vplay_custom_playlists_v2");
+    if (saved) {
+      try {
+        const parsed = JSON.parse(saved);
+        if (Array.isArray(parsed)) {
+          return parsed.flatMap(pl => pl.channels || []);
+        }
+      } catch (e) {
+        console.error(e);
+      }
+    }
+    return [];
+  }, [searchQuery, displayTab]);
   const [isSearchFocused, setIsSearchFocused] = useState(false);
   const [isSearchLoading, setIsSearchLoading] = useState(false);
   const [searchResults, setSearchResults] = useState<any[]>([]);
@@ -11756,6 +11857,15 @@ const [headingBar, setHeadingBar] = useState(() => {
                       placeholder="Find and explore Vplay"
                       className={`flex-1 bg-transparent border-none outline-none text-lg font-normal ${isDark ? "text-white placeholder:text-white/30" : "text-black placeholder:text-black/30"}`}
                     />
+                    <select
+                      value={searchFilterOption}
+                      onChange={(e) => setSearchFilterOption(e.target.value as any)}
+                      className="bg-transparent text-sm text-[#4AC4FE] font-black border-none outline-none cursor-pointer shrink-0 max-w-[124px] mr-2"
+                    >
+                      <option value="Tất cả kênh" className={isDark ? "bg-[#181924] text-white" : "bg-white text-black"}>Tất cả kênh</option>
+                      <option value="Kênh của Vplay" className={isDark ? "bg-[#181924] text-white" : "bg-white text-black"}>Kênh của Vplay</option>
+                      <option value="Kênh của bạn" className={isDark ? "bg-[#181924] text-white" : "bg-white text-black"}>Kênh của bạn</option>
+                    </select>
                     {searchQuery && (
                       <button onClick={() => setSearchQuery("")} className="p-1 rounded-full hover:bg-black/10">
                         <X size={16} />
@@ -11802,6 +11912,8 @@ const [headingBar, setHeadingBar] = useState(() => {
                   setIsSidebarLocked={setIsSidebarLocked}
                   setSearchQuery={setSearchQuery}
                   searchFilter={searchFilter}
+                  allCustomChannels={allCustomChannels}
+                  searchFilterOption={searchFilterOption}
                 />
               </div>
             </motion.div>
@@ -11917,10 +12029,40 @@ const [headingBar, setHeadingBar] = useState(() => {
                   setIsSidebarLocked={setIsSidebarLocked}
                   handleSearchContextMenu={handleSearchContextMenu}
                   searchFilter={searchFilter}
+                  allCustomChannels={allCustomChannels}
+                  searchFilterOption={searchFilterOption}
+                  setSearchFilterOption={setSearchFilterOption}
                 />
               )}
               {displayTab === "Live" && (
                 <TVContent 
+                  mode="live"
+                  active={activeChannel} 
+                  setActive={handleChannelSelect} 
+                  isDark={isDark} 
+                  favorites={favorites} 
+                  toggleFavorite={toggleFavorite} 
+                  user={user}
+                  onLogin={handleLogin}
+                  isDev={isDev}
+                  liquidGlass={liquidGlass}
+                  sortOrder={sortOrder}
+                  setSortOrder={setSortOrder}
+                  showSplash={showSplash}
+                  featureFlags={featureFlags}
+                  searchQuery={searchQuery}
+                  bypassed={bypassed}
+                  setIsPlayerInView={setIsPlayerInView}
+                  loadingTreatment={loadingTreatment}
+                  currentTime={currentTime}
+                  onChannelContextMenu={onChannelContextMenu}
+                  pinnedChannels={pinnedChannels}
+                  togglePinChannel={togglePinChannel}
+                />
+              )}
+              {displayTab === "Realm" && (
+                <TVContent 
+                  mode="realm"
                   active={activeChannel} 
                   setActive={handleChannelSelect} 
                   isDark={isDark} 
